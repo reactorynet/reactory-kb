@@ -1,0 +1,25 @@
+{
+  "name": "@reactory/reactory-kb",
+  "version": "1.0.0",
+  "description": "Reactory Knowledge Base Module - Comprehensive knowledge management for users and AI agents",
+  "main": "index.ts",
+  "keywords": [
+    "reactory",
+    "knowledge-base",
+    "kb",
+    "knowledge-management",
+    "ai-integration",
+    "collaboration"
+  ],
+  "author": "Reactory Development Team",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactorynet/reactory-express-server.git",
+    "directory": "src/modules/reactory-kb"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@reactory/reactory-core": "^1.0.0"
+  }
+}
