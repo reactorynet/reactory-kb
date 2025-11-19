@@ -1,0 +1,209 @@
+{
+  "defaultCategories": [
+    {
+      "id": "getting-started",
+      "name": "Getting Started",
+      "description": "Introductory guides and tutorials for new users",
+      "icon": "rocket",
+      "color": "#4CAF50",
+      "order": 1,
+      "subcategories": [
+        {
+          "id": "installation",
+          "name": "Installation",
+          "description": "Installation and setup guides",
+          "icon": "download",
+          "order": 1
+        },
+        {
+          "id": "quick-start",
+          "name": "Quick Start",
+          "description": "Quick start guides and tutorials",
+          "icon": "flash",
+          "order": 2
+        },
+        {
+          "id": "basic-concepts",
+          "name": "Basic Concepts",
+          "description": "Introduction to fundamental concepts",
+          "icon": "school",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "tutorials",
+      "name": "Tutorials",
+      "description": "Step-by-step tutorials and how-to guides",
+      "icon": "book",
+      "color": "#2196F3",
+      "order": 2,
+      "subcategories": [
+        {
+          "id": "beginner",
+          "name": "Beginner",
+          "description": "Tutorials for beginners",
+          "icon": "star",
+          "order": 1
+        },
+        {
+          "id": "intermediate",
+          "name": "Intermediate",
+          "description": "Intermediate-level tutorials",
+          "icon": "trending-up",
+          "order": 2
+        },
+        {
+          "id": "advanced",
+          "name": "Advanced",
+          "description": "Advanced tutorials and guides",
+          "icon": "rocket-outline",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "api-reference",
+      "name": "API Reference",
+      "description": "API documentation and reference",
+      "icon": "code",
+      "color": "#9C27B0",
+      "order": 3,
+      "subcategories": [
+        {
+          "id": "rest-api",
+          "name": "REST API",
+          "description": "REST API endpoints and documentation",
+          "icon": "cloud",
+          "order": 1
+        },
+        {
+          "id": "graphql-api",
+          "name": "GraphQL API",
+          "description": "GraphQL schema and queries",
+          "icon": "git-network",
+          "order": 2
+        },
+        {
+          "id": "sdk",
+          "name": "SDK & Libraries",
+          "description": "SDK documentation and examples",
+          "icon": "library",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "guides",
+      "name": "Guides",
+      "description": "In-depth guides and best practices",
+      "icon": "map",
+      "color": "#FF9800",
+      "order": 4,
+      "subcategories": [
+        {
+          "id": "best-practices",
+          "name": "Best Practices",
+          "description": "Recommended approaches and patterns",
+          "icon": "checkmark-circle",
+          "order": 1
+        },
+        {
+          "id": "architecture",
+          "name": "Architecture",
+          "description": "System architecture and design",
+          "icon": "git-branch",
+          "order": 2
+        },
+        {
+          "id": "security",
+          "name": "Security",
+          "description": "Security guidelines and practices",
+          "icon": "shield",
+          "order": 3
+        },
+        {
+          "id": "performance",
+          "name": "Performance",
+          "description": "Performance optimization guides",
+          "icon": "speedometer",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "name": "Troubleshooting",
+      "description": "Common issues and solutions",
+      "icon": "construct",
+      "color": "#F44336",
+      "order": 5,
+      "subcategories": [
+        {
+          "id": "common-issues",
+          "name": "Common Issues",
+          "description": "Frequently encountered problems",
+          "icon": "alert-circle",
+          "order": 1
+        },
+        {
+          "id": "error-messages",
+          "name": "Error Messages",
+          "description": "Error message explanations",
+          "icon": "warning",
+          "order": 2
+        },
+        {
+          "id": "debugging",
+          "name": "Debugging",
+          "description": "Debugging tips and techniques",
+          "icon": "bug",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "name": "FAQ",
+      "description": "Frequently asked questions",
+      "icon": "help-circle",
+      "color": "#607D8B",
+      "order": 6
+    },
+    {
+      "id": "release-notes",
+      "name": "Release Notes",
+      "description": "Version release notes and changelogs",
+      "icon": "document-text",
+      "color": "#00BCD4",
+      "order": 7
+    },
+    {
+      "id": "glossary",
+      "name": "Glossary",
+      "description": "Definitions and terminology",
+      "icon": "book-outline",
+      "color": "#3F51B5",
+      "order": 8
+    }
+  ],
+  "categoryPresets": {
+    "technical-documentation": {
+      "name": "Technical Documentation",
+      "categories": ["getting-started", "tutorials", "api-reference", "guides", "troubleshooting", "faq"]
+    },
+    "user-manual": {
+      "name": "User Manual",
+      "categories": ["getting-started", "tutorials", "guides", "troubleshooting", "faq"]
+    },
+    "developer-portal": {
+      "name": "Developer Portal",
+      "categories": ["getting-started", "api-reference", "guides", "release-notes", "glossary"]
+    },
+    "knowledge-center": {
+      "name": "Knowledge Center",
+      "categories": ["getting-started", "tutorials", "guides", "faq", "glossary"]
+    }
+  }
+}
+

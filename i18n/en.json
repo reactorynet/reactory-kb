@@ -1,0 +1,297 @@
+{
+  "kb": {
+    "common": {
+      "knowledgeBase": "Knowledge Base",
+      "article": "Article",
+      "category": "Category",
+      "tag": "Tag",
+      "search": "Search",
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "publish": "Publish",
+      "draft": "Draft",
+      "archived": "Archived",
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "language": "Language",
+      "translation": "Translation"
+    },
+    "knowledgeBase": {
+      "title": "Knowledge Bases",
+      "create": "Create Knowledge Base",
+      "edit": "Edit Knowledge Base",
+      "delete": "Delete Knowledge Base",
+      "settings": "Knowledge Base Settings",
+      "statistics": "Statistics",
+      "myKnowledgeBases": "My Knowledge Bases",
+      "sharedWithMe": "Shared With Me",
+      "publicKnowledgeBases": "Public Knowledge Bases",
+      "organizationKnowledgeBases": "Organization Knowledge Bases",
+      "visibility": {
+        "label": "Visibility",
+        "private": "Private",
+        "public": "Public",
+        "shared": "Shared",
+        "organization": "Organization"
+      },
+      "messages": {
+        "createSuccess": "Knowledge base created successfully",
+        "updateSuccess": "Knowledge base updated successfully",
+        "deleteSuccess": "Knowledge base deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this knowledge base? This action cannot be undone.",
+        "noArticles": "No articles in this knowledge base yet"
+      }
+    },
+    "article": {
+      "title": "Articles",
+      "create": "Create Article",
+      "edit": "Edit Article",
+      "delete": "Delete Article",
+      "publish": "Publish Article",
+      "archive": "Archive Article",
+      "restore": "Restore Article",
+      "viewHistory": "View History",
+      "versions": "Versions",
+      "currentVersion": "Current Version",
+      "revertTo": "Revert to Version",
+      "status": {
+        "label": "Status",
+        "draft": "Draft",
+        "underReview": "Under Review",
+        "published": "Published",
+        "archived": "Archived"
+      },
+      "metadata": {
+        "author": "Author",
+        "createdAt": "Created",
+        "updatedAt": "Last Updated",
+        "publishedAt": "Published",
+        "viewCount": "Views",
+        "readingTime": "Reading Time",
+        "difficulty": "Difficulty"
+      },
+      "fields": {
+        "title": "Title",
+        "content": "Content",
+        "summary": "Summary",
+        "description": "Description",
+        "tags": "Tags",
+        "categories": "Categories",
+        "language": "Language",
+        "attachments": "Attachments"
+      },
+      "messages": {
+        "createSuccess": "Article created successfully",
+        "updateSuccess": "Article updated successfully",
+        "deleteSuccess": "Article deleted successfully",
+        "publishSuccess": "Article published successfully",
+        "archiveSuccess": "Article archived successfully",
+        "restoreSuccess": "Article restored successfully",
+        "deleteConfirm": "Are you sure you want to delete this article?",
+        "publishConfirm": "Are you sure you want to publish this article?",
+        "archiveConfirm": "Are you sure you want to archive this article?"
+      }
+    },
+    "category": {
+      "title": "Categories",
+      "create": "Create Category",
+      "edit": "Edit Category",
+      "delete": "Delete Category",
+      "move": "Move Category",
+      "merge": "Merge Categories",
+      "parentCategory": "Parent Category",
+      "subcategories": "Subcategories",
+      "articleCount": "Articles",
+      "messages": {
+        "createSuccess": "Category created successfully",
+        "updateSuccess": "Category updated successfully",
+        "deleteSuccess": "Category deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this category?",
+        "moveSuccess": "Category moved successfully"
+      }
+    },
+    "search": {
+      "placeholder": "Search articles...",
+      "results": "Search Results",
+      "noResults": "No results found",
+      "showing": "Showing {count} results",
+      "filters": "Filters",
+      "sortBy": "Sort By",
+      "relevance": "Relevance",
+      "dateCreated": "Date Created",
+      "dateUpdated": "Date Updated",
+      "viewCount": "Most Viewed",
+      "suggestions": "Did you mean:",
+      "advanced": "Advanced Search"
+    },
+    "comments": {
+      "title": "Comments",
+      "add": "Add Comment",
+      "edit": "Edit Comment",
+      "delete": "Delete Comment",
+      "reply": "Reply",
+      "replies": "Replies",
+      "noComments": "No comments yet",
+      "messages": {
+        "addSuccess": "Comment added successfully",
+        "updateSuccess": "Comment updated successfully",
+        "deleteSuccess": "Comment deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this comment?"
+      }
+    },
+    "bookmarks": {
+      "title": "Bookmarks",
+      "add": "Add Bookmark",
+      "remove": "Remove Bookmark",
+      "myBookmarks": "My Bookmarks",
+      "messages": {
+        "addSuccess": "Bookmark added successfully",
+        "removeSuccess": "Bookmark removed successfully"
+      }
+    },
+    "localization": {
+      "title": "Localization",
+      "addTranslation": "Add Translation",
+      "editTranslation": "Edit Translation",
+      "removeTranslation": "Remove Translation",
+      "availableLanguages": "Available Languages",
+      "missingTranslations": "Missing Translations",
+      "translationStatus": "Translation Status",
+      "completeness": "Completeness",
+      "messages": {
+        "addSuccess": "Translation added successfully",
+        "updateSuccess": "Translation updated successfully",
+        "removeSuccess": "Translation removed successfully",
+        "removeConfirm": "Are you sure you want to remove this translation?"
+      }
+    },
+    "permissions": {
+      "title": "Permissions",
+      "grant": "Grant Permission",
+      "revoke": "Revoke Permission",
+      "owner": "Owner",
+      "admin": "Admin",
+      "writer": "Writer",
+      "reader": "Reader",
+      "shareLink": "Share Link",
+      "generateLink": "Generate Share Link",
+      "copyLink": "Copy Link",
+      "messages": {
+        "grantSuccess": "Permission granted successfully",
+        "revokeSuccess": "Permission revoked successfully",
+        "linkGenerated": "Share link generated successfully",
+        "linkCopied": "Link copied to clipboard"
+      }
+    },
+    "attachments": {
+      "title": "Attachments",
+      "upload": "Upload Attachment",
+      "delete": "Delete Attachment",
+      "download": "Download",
+      "fileName": "File Name",
+      "fileSize": "File Size",
+      "uploadedBy": "Uploaded By",
+      "uploadedAt": "Uploaded At",
+      "messages": {
+        "uploadSuccess": "Attachment uploaded successfully",
+        "deleteSuccess": "Attachment deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this attachment?",
+        "uploadError": "Error uploading attachment",
+        "fileTooLarge": "File is too large. Maximum size is {max}",
+        "invalidFileType": "Invalid file type. Allowed types: {types}"
+      }
+    },
+    "versioning": {
+      "title": "Version History",
+      "version": "Version",
+      "changes": "Changes",
+      "restoreVersion": "Restore This Version",
+      "compareVersions": "Compare Versions",
+      "noVersions": "No version history available",
+      "messages": {
+        "restoreSuccess": "Version restored successfully",
+        "restoreConfirm": "Are you sure you want to restore this version? Current content will be saved as a new version."
+      }
+    },
+    "ai": {
+      "title": "AI Assistant",
+      "generate": "Generate Content",
+      "summarize": "Summarize",
+      "translate": "Translate",
+      "suggestions": "AI Suggestions",
+      "enhance": "Enhance Content",
+      "validate": "Validate Content",
+      "confidence": "Confidence",
+      "reviewing": "AI is reviewing...",
+      "generating": "AI is generating...",
+      "messages": {
+        "generateSuccess": "Content generated successfully",
+        "summarizeSuccess": "Summary generated successfully",
+        "translateSuccess": "Translation completed successfully",
+        "enhanceSuccess": "Content enhanced successfully",
+        "validationComplete": "Validation complete",
+        "requiresReview": "AI-generated content requires human review before publishing"
+      }
+    },
+    "workflow": {
+      "submitForReview": "Submit for Review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "requestChanges": "Request Changes",
+      "reviewerComments": "Reviewer Comments",
+      "status": "Status",
+      "pending": "Pending",
+      "inReview": "In Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "messages": {
+        "submitSuccess": "Article submitted for review successfully",
+        "approveSuccess": "Article approved successfully",
+        "rejectSuccess": "Article rejected successfully",
+        "changesRequested": "Changes requested successfully"
+      }
+    },
+    "export": {
+      "title": "Export",
+      "format": "Format",
+      "options": "Options",
+      "includeMetadata": "Include Metadata",
+      "includeComments": "Include Comments",
+      "includeVersionHistory": "Include Version History",
+      "exportArticle": "Export Article",
+      "exportKnowledgeBase": "Export Knowledge Base",
+      "messages": {
+        "exportSuccess": "Export completed successfully",
+        "exportError": "Error during export"
+      }
+    },
+    "import": {
+      "title": "Import",
+      "selectFile": "Select File",
+      "format": "Format",
+      "options": "Options",
+      "autoPublish": "Auto Publish",
+      "preserveMetadata": "Preserve Metadata",
+      "conflictResolution": "Conflict Resolution",
+      "importArticle": "Import Article",
+      "importKnowledgeBase": "Import Knowledge Base",
+      "messages": {
+        "importSuccess": "Import completed successfully",
+        "importError": "Error during import"
+      }
+    },
+    "errors": {
+      "general": "An error occurred. Please try again.",
+      "notFound": "The requested resource was not found.",
+      "unauthorized": "You are not authorized to perform this action.",
+      "forbidden": "Access forbidden.",
+      "validationError": "Please check your input and try again.",
+      "networkError": "Network error. Please check your connection."
+    }
+  }
+}
+

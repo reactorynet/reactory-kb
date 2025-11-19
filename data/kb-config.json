@@ -1,0 +1,146 @@
+{
+  "defaultSettings": {
+    "visibility": "private",
+    "enableAIContributions": true,
+    "enableVersioning": true,
+    "enableComments": true,
+    "enableBookmarks": true,
+    "enableCategories": true,
+    "enableTags": true,
+    "enableMultiLanguage": true,
+    "enableSearch": true,
+    "enableAttachments": true,
+    "maxArticleSize": 1048576,
+    "maxAttachmentsPerArticle": 10,
+    "maxAttachmentSize": 10485760,
+    "allowedFileTypes": ["pdf", "doc", "docx", "txt", "md", "jpg", "jpeg", "png", "gif", "svg", "mp4", "mp3"],
+    "searchProvider": "meilisearch",
+    "cacheTTL": 3600,
+    "defaultLanguage": "en",
+    "supportedLanguages": ["en", "es", "fr", "de", "pt", "it", "ja", "zh", "ko"],
+    "enableAutoTranslation": false,
+    "translationProvider": null
+  },
+  "features": {
+    "articleReview": {
+      "enabled": true,
+      "requireReview": false,
+      "minReviewers": 1,
+      "autoApproveAfterDays": null
+    },
+    "versionControl": {
+      "enabled": true,
+      "maxVersions": 50,
+      "autoArchiveOldVersions": true,
+      "archiveAfterDays": 365
+    },
+    "collaboration": {
+      "enableComments": true,
+      "enableBookmarks": true,
+      "enableSharing": true,
+      "enableLikes": true,
+      "enableRatings": false,
+      "commentModeration": false
+    },
+    "search": {
+      "provider": "meilisearch",
+      "enableFacets": true,
+      "enableSuggestions": true,
+      "enableHighlighting": true,
+      "maxResults": 100,
+      "typoTolerance": true
+    },
+    "ai": {
+      "enableAIGeneration": true,
+      "enableAISummarization": true,
+      "enableAITranslation": false,
+      "enableAISuggestions": true,
+      "requireHumanReview": true,
+      "confidenceThreshold": 0.8
+    }
+  },
+  "permissions": {
+    "defaultKBVisibility": "private",
+    "inheritPermissions": true,
+    "allowUserKBCreation": true,
+    "allowOrganizationKBCreation": true,
+    "defaultRoles": {
+      "owner": ["read", "write", "delete", "manage", "share"],
+      "admin": ["read", "write", "manage", "share"],
+      "writer": ["read", "write"],
+      "reader": ["read"]
+    }
+  },
+  "content": {
+    "richTextEditor": {
+      "enabled": true,
+      "toolbar": "full",
+      "allowHTML": true,
+      "allowMarkdown": true,
+      "enableCodeHighlighting": true,
+      "enableTables": true,
+      "enableImages": true,
+      "enableVideos": true,
+      "enableLinks": true,
+      "maxImageSize": 5242880,
+      "allowedImageTypes": ["jpg", "jpeg", "png", "gif", "svg"]
+    },
+    "templates": {
+      "enabled": true,
+      "useDefaultTemplates": true,
+      "allowCustomTemplates": true
+    },
+    "categories": {
+      "enabled": true,
+      "maxDepth": 5,
+      "allowMultiple": true,
+      "requirePrimary": false
+    },
+    "tags": {
+      "enabled": true,
+      "maxTags": 20,
+      "suggestTags": true,
+      "allowCustomTags": true
+    }
+  },
+  "localization": {
+    "defaultLanguage": "en",
+    "supportedLanguages": ["en", "es", "fr"],
+    "enableAutoDetect": true,
+    "fallbackLanguage": "en",
+    "enableTranslationWorkflow": false,
+    "enableMachineTranslation": false,
+    "translationProviders": []
+  },
+  "notifications": {
+    "enableEmailNotifications": true,
+    "enableInAppNotifications": true,
+    "notifyOnNewArticle": false,
+    "notifyOnUpdate": false,
+    "notifyOnComment": true,
+    "notifyOnMention": true,
+    "notifyOnReview": true
+  },
+  "analytics": {
+    "trackViews": true,
+    "trackSearches": true,
+    "trackEngagement": true,
+    "trackAIUsage": true,
+    "retentionDays": 90
+  },
+  "export": {
+    "enableExport": true,
+    "formats": ["pdf", "markdown", "html", "json"],
+    "includeMetadata": true,
+    "includeComments": false,
+    "includeVersionHistory": false
+  },
+  "import": {
+    "enableImport": true,
+    "formats": ["markdown", "html", "json"],
+    "autoPublish": false,
+    "preserveMetadata": true,
+    "conflictResolution": "skip"
+  }
+}
+

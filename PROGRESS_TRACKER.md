@@ -1,0 +1,1178 @@
+# Reactory Knowledge Base Module - Implementation Progress Tracker
+
+**Project Start Date**: November 18, 2025  
+**Last Updated**: November 18, 2025  
+**Target Completion**: TBD  
+**Current Phase**: Phase 0 - Planning
+
+---
+
+## 📊 Overall Progress
+
+```
+Foundation:        [░░░░░░░░░░] 0%
+Models:            [░░░░░░░░░░] 0%
+Core Services:     [░░░░░░░░░░] 0%
+Multi-language:    [░░░░░░░░░░] 0%
+AI Integration:    [░░░░░░░░░░] 0%
+GraphQL API:       [░░░░░░░░░░] 0%
+Workflows:         [░░░░░░░░░░] 0%
+Search:            [░░░░░░░░░░] 0%
+Client UI:         [░░░░░░░░░░] 0%
+Testing:           [░░░░░░░░░░] 0%
+Documentation:     [███░░░░░░░] 30%
+```
+
+**Overall Completion**: 2.7% (3/110 tasks completed)
+
+---
+
+## 🎯 Phase 1: Foundation & Core Dependencies (0% Complete)
+
+### 1.1 Prerequisites & Setup
+- [ ] **Task 1.1.1**: Review existing Reactory services and architecture
+  - [ ] Study `reactory-core.ReactoryContentService` implementation
+  - [ ] Study `reactory-core.ReactorySearchService` integration
+  - [ ] Study `reactory-core.ReactoryFileService` for attachments
+  - [ ] Review existing Content model and schema
+  - [ ] Review MeiliSearch integration in reactory-core
+  - [ ] Review Reactor AI module for macro patterns
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: None
+  - **Status**: Not Started
+  - **Notes**: 
+    - ReactoryContentService is the foundation for KB
+    - Content model needs extension fields for KB functionality
+    - MeiliSearch used for full-text search
+
+- [✅] **Task 1.1.2**: Set up reactory-kb module structure - [DONE]
+  - [✅] Study `reactory-reactor` and `reactory-kyc` as module examples
+  - [✅] Create complete module directory structure (14 directories)
+  - [✅] Initialize package.json with dependencies
+  - [✅] Create index.ts with ReactoryModuleDefinition  
+  - [✅] Create placeholder index files for all subdirectories
+  - **Estimated Time**: 2 hours
+  - **Assignee**: TBD
+  - **Dependencies**: None
+  - **Status**: Not Started
+  - **Deliverables**:
+    - Complete folder structure
+    - package.json with dependencies
+    - index.ts with module definition
+    - tsconfig.json
+    - All placeholder index.ts files
+
+### 1.2 Type Definitions
+- [ ] **Task 1.2.1**: Define core TypeScript types and interfaces
+  - [ ] Create `types/kb.types.ts` with core KB types
+  - [ ] Create `types/article.types.ts` with article types
+  - [ ] Create `types/localization.types.ts` with multi-language types
+  - [ ] Create `types/category.types.ts` with category types
+  - [ ] Create `types/permission.types.ts` with access control types
+  - [ ] Create `types/search.types.ts` with search types
+  - [ ] Create `types/ai.types.ts` with AI integration types
+  - [ ] Export all types from `types/index.ts`
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 1.1.2
+  - **Status**: Not Started
+  - **Deliverables**:
+    - types/kb.types.ts with interfaces for IKBContent, KBContentType enums
+    - types/article.types.ts with ArticleStatus, IArticleVersion
+    - types/localization.types.ts with IReactoryContentLocalization
+    - types/category.types.ts with category hierarchy types
+    - types/permission.types.ts with KBVisibility, PermissionLevel
+    - types/search.types.ts with SearchQuery, SearchResult
+    - types/ai.types.ts with AIKnowledgeContext, AIContentSummary
+
+### 1.3 Configuration & Static Data
+- [ ] **Task 1.3.1**: Create configuration data files
+  - [ ] Create `data/content-templates.json` with article templates
+  - [ ] Create `data/category-schemas.json` with default categories
+  - [ ] Create configuration schema validation
+  - [ ] Create default KB settings configuration
+  - **Estimated Time**: 3 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 1.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - data/content-templates.json
+    - data/category-schemas.json
+    - data/kb-config.json
+    - Schema validators
+
+- [ ] **Task 1.3.2**: Create i18n translation files
+  - [ ] Create `i18n/en.json` with English translations
+  - [ ] Create `i18n/es.json` with Spanish translations
+  - [ ] Create `i18n/fr.json` with French translations
+  - [ ] Add translation keys for all UI strings
+  - [ ] Add translation helpers in utils
+  - **Estimated Time**: 4 hours
+  - **Assignee**: TBD
+  - **Dependencies**: None
+  - **Status**: Not Started
+  - **Deliverables**:
+    - i18n/en.json, i18n/es.json, i18n/fr.json
+    - Translation keys for KB UI
+    - i18n helper utilities
+
+---
+
+## 🗄️ Phase 2: Models & Data Layer (0% Complete)
+
+### 2.1 Content Model Extensions
+- [ ] **Task 2.1.1**: Extend Content model for KB functionality
+  - [ ] Review existing IReactoryContent interface
+  - [ ] Add KB-specific fields (contentType, knowledgeBase, categories, tags)
+  - [ ] Add localization fields (lng, localizedContent)
+  - [ ] Add KB metadata fields (status, viewCount, bookmarks, attachments)
+  - [ ] Update Content schema with new fields
+  - [ ] Create migration script for existing content
+  - [ ] Add indexes for KB queries
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 1.2.1
+  - **Status**: Not Started
+  - **Notes**: 
+    - Extends existing Content model, doesn't create new one
+    - contentType field distinguishes KB entities (knowledge-base, article, category, template)
+  - **Deliverables**:
+    - Updated Content model with KB fields
+    - Migration script
+    - Database indexes
+    - Updated TypeScript interfaces
+
+### 2.2 Supporting Models
+- [ ] **Task 2.2.1**: Create supporting entity models
+  - [ ] Implement `models/KBVersion.ts` for article version history
+  - [ ] Implement `models/KBComment.ts` for article comments
+  - [ ] Implement `models/KBBookmark.ts` for user bookmarks
+  - [ ] Implement `models/KBAttachment.ts` for file metadata
+  - [ ] Add model exports to `models/index.ts`
+  - [ ] Create database migrations
+  - [ ] Add database indexes for performance
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 2.1.1
+  - **Status**: Not Started
+  - **Deliverables**: All supporting model files with schemas
+  - **Notes**:
+    - Version: Track article changes over time
+    - Comment: Collaboration and discussion
+    - Bookmark: User quick access
+    - Attachment: Link files to articles
+
+---
+
+## 🔧 Phase 3: Core Services Implementation (0% Complete)
+
+### 3.1 KnowledgeBaseService
+- [ ] **Task 3.1.1**: Implement KnowledgeBaseService
+  - [ ] Create service class structure extending ReactoryContentService
+  - [ ] Implement `createKnowledgeBase()` (creates Content with contentType: 'knowledge-base')
+  - [ ] Implement `updateKnowledgeBase()` method
+  - [ ] Implement `deleteKnowledgeBase()` method
+  - [ ] Implement `getKnowledgeBase()` method
+  - [ ] Implement `listKnowledgeBases()` with filtering
+  - [ ] Implement `getKBArticles()` method
+  - [ ] Implement `getKBCategories()` method
+  - [ ] Implement `getKBStatistics()` method
+  - [ ] Add service registration to module
+  - [ ] Write unit tests
+  - **Estimated Time**: 14 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 2.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/KnowledgeBaseService.ts
+    - Unit tests
+    - Service registration
+
+### 3.2 ArticleService
+- [ ] **Task 3.2.1**: Implement ArticleService
+  - [ ] Create service class structure extending ReactoryContentService
+  - [ ] Implement `createArticle()` (creates Content with contentType: 'article')
+  - [ ] Implement `updateArticle()` method with versioning
+  - [ ] Implement `deleteArticle()` method
+  - [ ] Implement `getArticle()` method
+  - [ ] Implement `publishArticle()` method
+  - [ ] Implement `archiveArticle()` method
+  - [ ] Implement `getArticleVersions()` method
+  - [ ] Implement `revertToVersion()` method
+  - [ ] Implement `addAttachment()` method using ReactoryFileService
+  - [ ] Implement `removeAttachment()` method
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 16 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 2.1.1, Task 2.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/ArticleService.ts
+    - Article versioning logic
+    - Unit tests
+    - Service registration
+
+### 3.3 CategoryService
+- [ ] **Task 3.3.1**: Implement CategoryService
+  - [ ] Create service class structure
+  - [ ] Implement `createCategory()` (creates Content with contentType: 'category')
+  - [ ] Implement `updateCategory()` method
+  - [ ] Implement `deleteCategory()` method
+  - [ ] Implement `getCategory()` method
+  - [ ] Implement `getCategoryTree()` method for hierarchy
+  - [ ] Implement `moveCategory()` method for reorganization
+  - [ ] Implement `getArticlesByCategory()` method
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 2.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/CategoryService.ts
+    - Category hierarchy logic
+    - Unit tests
+
+### 3.4 SearchService
+- [ ] **Task 3.4.1**: Implement SearchService
+  - [ ] Create service class wrapping ReactorySearchService
+  - [ ] Implement `searchArticles()` method
+  - [ ] Implement `searchKnowledgeBases()` method
+  - [ ] Implement `indexContent()` method for MeiliSearch
+  - [ ] Implement `reindexKnowledgeBase()` method
+  - [ ] Implement `getSearchSuggestions()` method
+  - [ ] Implement `searchByContentType()` method
+  - [ ] Implement faceted search with filters (categories, tags, status, lng)
+  - [ ] Configure MeiliSearch indexes and settings
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 14 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1, ReactorySearchService
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/SearchService.ts
+    - MeiliSearch index configuration
+    - Faceted search implementation
+    - Unit tests
+
+### 3.5 CollaborationService
+- [ ] **Task 3.5.1**: Implement CollaborationService
+  - [ ] Create service class structure
+  - [ ] Implement `addComment()` method
+  - [ ] Implement `updateComment()` method
+  - [ ] Implement `deleteComment()` method
+  - [ ] Implement `getComments()` method with threading
+  - [ ] Implement `addBookmark()` method
+  - [ ] Implement `removeBookmark()` method
+  - [ ] Implement `getUserBookmarks()` method
+  - [ ] Implement `getContentActivity()` method
+  - [ ] Implement `updateViewCount()` method
+  - [ ] Implement `likeContent()` / `unlikeContent()` methods
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 12 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 2.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/CollaborationService.ts
+    - Comment threading logic
+    - Bookmark management
+    - Unit tests
+
+### 3.6 PermissionService
+- [ ] **Task 3.6.1**: Implement PermissionService
+  - [ ] Create service class structure
+  - [ ] Implement `checkPermission()` method
+  - [ ] Implement `grantPermission()` method
+  - [ ] Implement `revokePermission()` method
+  - [ ] Implement `getContentPermissions()` method
+  - [ ] Implement `getUserPermissions()` method
+  - [ ] Implement visibility checking (private, public, shared, organization)
+  - [ ] Implement role-based access control
+  - [ ] Add permission caching layer
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 2.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/PermissionService.ts
+    - Permission checking logic
+    - RBAC implementation
+    - Unit tests
+
+---
+
+## 🌍 Phase 4: Multi-language Support (0% Complete)
+
+### 4.1 Localization Service
+- [ ] **Task 4.1.1**: Implement LocalizationService
+  - [ ] Create service class structure
+  - [ ] Implement `addLocalizedContent()` method
+  - [ ] Implement `updateLocalizedContent()` method
+  - [ ] Implement `removeLocalizedContent()` method
+  - [ ] Implement `getLocalizedContent()` method
+  - [ ] Implement `getAvailableLanguages()` method
+  - [ ] Implement `getMissingTranslations()` method
+  - [ ] Implement language fallback logic (e.g., fr-CA → fr → en)
+  - [ ] Implement localized search support
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 12 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/LocalizationService.ts
+    - Language fallback logic
+    - Localized content management
+    - Unit tests
+
+### 4.2 Translation Integration
+- [ ] **Task 4.2.1**: Implement translation helpers and utilities
+  - [ ] Create translation utilities in `utils/translation.ts`
+  - [ ] Implement `getPreferredLanguage()` helper
+  - [ ] Implement `getLocalizedField()` helper
+  - [ ] Implement locale detection from request context
+  - [ ] Add translation validation helpers
+  - [ ] Create translation export/import utilities
+  - [ ] Write unit tests
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 4.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - utils/translation.ts
+    - Translation helpers
+    - Locale detection
+    - Unit tests
+
+---
+
+## 🤖 Phase 5: AI Integration & Macros (0% Complete)
+
+### 5.1 AI Integration Service
+- [ ] **Task 5.1.1**: Implement AIIntegrationService
+  - [ ] Create service class structure
+  - [ ] Implement `getArticlesForAI()` method
+  - [ ] Implement `createArticleFromAI()` method
+  - [ ] Implement `validateAIContent()` method
+  - [ ] Implement `getKnowledgeContext()` method
+  - [ ] Implement `updateAIKnowledge()` method
+  - [ ] Implement `getLocalizedContent()` for AI consumption
+  - [ ] Implement AI content formatting utilities
+  - [ ] Implement confidence scoring for AI-generated content
+  - [ ] Add service registration
+  - [ ] Write unit tests
+  - **Estimated Time**: 14 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1, Task 4.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - services/AIIntegrationService.ts
+    - AI content validation
+    - Context formatting
+    - Unit tests
+
+### 5.2 Knowledge Base Macros
+- [ ] **Task 5.2.1**: Implement KB management macros
+  - [ ] Create `ai/macros/CreateKnowledgeBaseMacro.ts`
+  - [ ] Create `ai/macros/UpdateKnowledgeBaseMacro.ts`
+  - [ ] Create `ai/macros/GetKnowledgeBaseMacro.ts`
+  - [ ] Create `ai/macros/ListKnowledgeBasesMacro.ts`
+  - [ ] Create `ai/macros/DeleteKnowledgeBaseMacro.ts`
+  - [ ] Create `ai/macros/ShareKnowledgeBaseMacro.ts`
+  - [ ] Register macros in tool registry
+  - [ ] Write macro tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 5.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - ai/macros/ directory with KB macros
+    - Macro registrations
+    - Tests
+
+- [ ] **Task 5.2.2**: Implement article management macros
+  - [ ] Create `ai/macros/CreateArticleMacro.ts`
+  - [ ] Create `ai/macros/UpdateArticleMacro.ts`
+  - [ ] Create `ai/macros/GetArticleMacro.ts`
+  - [ ] Create `ai/macros/DeleteArticleMacro.ts`
+  - [ ] Create `ai/macros/PublishArticleMacro.ts`
+  - [ ] Create `ai/macros/ArchiveArticleMacro.ts`
+  - [ ] Create `ai/macros/GetArticleVersionsMacro.ts`
+  - [ ] Register macros in tool registry
+  - [ ] Write macro tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 5.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - ai/macros/ directory with article macros
+    - Macro registrations
+    - Tests
+
+- [ ] **Task 5.2.3**: Implement search and collaboration macros
+  - [ ] Create `ai/macros/SearchArticlesMacro.ts`
+  - [ ] Create `ai/macros/SearchKnowledgeBasesMacro.ts`
+  - [ ] Create `ai/macros/GetSearchSuggestionsMacro.ts`
+  - [ ] Create `ai/macros/AddCommentMacro.ts`
+  - [ ] Create `ai/macros/GetCommentsMacro.ts`
+  - [ ] Create `ai/macros/AddBookmarkMacro.ts`
+  - [ ] Create `ai/macros/GetUserBookmarksMacro.ts`
+  - [ ] Register macros in tool registry
+  - [ ] Write macro tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 5.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - ai/macros/ directory with search/collab macros
+    - Macro registrations
+    - Tests
+
+- [ ] **Task 5.2.4**: Implement localization macros
+  - [ ] Create `ai/macros/AddLocalizedContentMacro.ts`
+  - [ ] Create `ai/macros/GetLocalizedArticleMacro.ts`
+  - [ ] Create `ai/macros/TranslateContentMacro.ts`
+  - [ ] Register macros in tool registry
+  - [ ] Write macro tests
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 5.1.1, Task 4.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - ai/macros/ directory with localization macros
+    - Macro registrations
+    - Tests
+
+- [ ] **Task 5.2.5**: Implement file operation macros
+  - [ ] Create `ai/macros/UploadAttachmentMacro.ts`
+  - [ ] Create `ai/macros/DeleteAttachmentMacro.ts`
+  - [ ] Create `ai/macros/GetAttachmentsMacro.ts`
+  - [ ] Register macros in tool registry
+  - [ ] Write macro tests
+  - **Estimated Time**: 4 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 5.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - ai/macros/ directory with file macros
+    - Macro registrations
+    - Tests
+
+### 5.3 AI Persona Configuration
+- [ ] **Task 5.3.1**: Create Knowledge Base AI Persona
+  - [ ] Create `ai/persona/KnowledgeBasePersona.ts`
+  - [ ] Define persona configuration with tools/macros
+  - [ ] Build system prompt for KB assistant
+  - [ ] Configure resources for AI context
+  - [ ] Define persona capabilities and limitations
+  - [ ] Add persona registration
+  - [ ] Write persona tests
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Tasks 5.2.1-5.2.5
+  - **Status**: Not Started
+  - **Deliverables**:
+    - ai/persona/KnowledgeBasePersona.ts
+    - System prompts
+    - Persona registration
+    - Tests
+
+---
+
+## 🌐 Phase 6: GraphQL API Layer (0% Complete)
+
+### 6.1 GraphQL Schema
+- [ ] **Task 6.1.1**: Define GraphQL types and schemas
+  - [ ] Create `graphql/types/KBContent.graphql`
+  - [ ] Create `graphql/types/KBLocalizedContent.graphql`
+  - [ ] Create `graphql/types/Category.graphql`
+  - [ ] Create `graphql/types/Comment.graphql`
+  - [ ] Create `graphql/types/Bookmark.graphql`
+  - [ ] Create `graphql/types/Attachment.graphql`
+  - [ ] Create `graphql/types/Permission.graphql`
+  - [ ] Create `graphql/types/Version.graphql`
+  - [ ] Define all enums (KBContentType, KBArticleStatus, KBVisibility, PermissionType)
+  - [ ] Define input types for all mutations
+  - [ ] Export schemas from `graphql/index.ts`
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 1.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/types/ directory with all type definitions
+    - Complete schema files
+    - Schema exports
+
+### 6.2 Query Resolvers
+- [ ] **Task 6.2.1**: Implement Knowledge Base query resolvers
+  - [ ] Create `graphql/resolvers/KBQueryResolver.ts`
+  - [ ] Implement `getKnowledgeBase` resolver
+  - [ ] Implement `listKnowledgeBases` resolver
+  - [ ] Implement `getKBArticles` resolver
+  - [ ] Implement `getKBCategories` resolver
+  - [ ] Add authentication checks
+  - [ ] Add permission checks
+  - [ ] Write resolver tests
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.1.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/KBQueryResolver.ts
+    - Query implementations
+    - Tests
+
+- [ ] **Task 6.2.2**: Implement Article query resolvers
+  - [ ] Create `graphql/resolvers/ArticleQueryResolver.ts`
+  - [ ] Implement `getArticle` resolver
+  - [ ] Implement `getArticleVersions` resolver
+  - [ ] Implement `getLocalizedArticle` resolver
+  - [ ] Add authentication checks
+  - [ ] Add permission checks
+  - [ ] Write resolver tests
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/ArticleQueryResolver.ts
+    - Query implementations
+    - Tests
+
+- [ ] **Task 6.2.3**: Implement Search query resolvers
+  - [ ] Create `graphql/resolvers/SearchQueryResolver.ts`
+  - [ ] Implement `searchKnowledgeBase` resolver
+  - [ ] Implement `searchArticles` resolver
+  - [ ] Implement `getSearchSuggestions` resolver
+  - [ ] Add authentication checks
+  - [ ] Write resolver tests
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.4.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/SearchQueryResolver.ts
+    - Query implementations
+    - Tests
+
+- [ ] **Task 6.2.4**: Implement Collaboration query resolvers
+  - [ ] Create `graphql/resolvers/CollaborationQueryResolver.ts`
+  - [ ] Implement `getComments` resolver
+  - [ ] Implement `getUserBookmarks` resolver
+  - [ ] Implement `getContentActivity` resolver
+  - [ ] Add authentication checks
+  - [ ] Write resolver tests
+  - **Estimated Time**: 4 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.5.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/CollaborationQueryResolver.ts
+    - Query implementations
+    - Tests
+
+### 6.3 Mutation Resolvers
+- [ ] **Task 6.3.1**: Implement Knowledge Base mutation resolvers
+  - [ ] Create `graphql/resolvers/KBMutationResolver.ts`
+  - [ ] Implement `createKnowledgeBase` mutation
+  - [ ] Implement `updateKnowledgeBase` mutation
+  - [ ] Implement `deleteKnowledgeBase` mutation
+  - [ ] Implement `shareKnowledgeBase` mutation
+  - [ ] Add authentication checks
+  - [ ] Add permission checks
+  - [ ] Add audit logging
+  - [ ] Write resolver tests
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.1.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/KBMutationResolver.ts
+    - Mutation implementations
+    - Tests
+
+- [ ] **Task 6.3.2**: Implement Article mutation resolvers
+  - [ ] Create `graphql/resolvers/ArticleMutationResolver.ts`
+  - [ ] Implement `createArticle` mutation
+  - [ ] Implement `updateArticle` mutation
+  - [ ] Implement `deleteArticle` mutation
+  - [ ] Implement `publishArticle` mutation
+  - [ ] Implement `archiveArticle` mutation
+  - [ ] Implement `addLocalizedContent` mutation
+  - [ ] Implement `removeLocalizedContent` mutation
+  - [ ] Add authentication checks
+  - [ ] Add permission checks
+  - [ ] Add audit logging
+  - [ ] Write resolver tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/ArticleMutationResolver.ts
+    - Mutation implementations
+    - Tests
+
+- [ ] **Task 6.3.3**: Implement Collaboration mutation resolvers
+  - [ ] Create `graphql/resolvers/CollaborationMutationResolver.ts`
+  - [ ] Implement `addComment` mutation
+  - [ ] Implement `updateComment` mutation
+  - [ ] Implement `deleteComment` mutation
+  - [ ] Implement `addBookmark` mutation
+  - [ ] Implement `removeBookmark` mutation
+  - [ ] Implement `likeContent` / `unlikeContent` mutations
+  - [ ] Add authentication checks
+  - [ ] Write resolver tests
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.5.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/CollaborationMutationResolver.ts
+    - Mutation implementations
+    - Tests
+
+- [ ] **Task 6.3.4**: Implement File operation mutation resolvers
+  - [ ] Create `graphql/resolvers/FileMutationResolver.ts`
+  - [ ] Implement `uploadAttachment` mutation
+  - [ ] Implement `deleteAttachment` mutation
+  - [ ] Add file upload handling with GraphQL upload
+  - [ ] Add authentication checks
+  - [ ] Add permission checks
+  - [ ] Write resolver tests
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1, Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/FileMutationResolver.ts
+    - Mutation implementations
+    - File upload handling
+    - Tests
+
+### 6.4 Subscriptions
+- [ ] **Task 6.4.1**: Implement GraphQL subscriptions
+  - [ ] Create `graphql/resolvers/SubscriptionResolver.ts`
+  - [ ] Implement `onArticleUpdated` subscription
+  - [ ] Implement `onCommentAdded` subscription
+  - [ ] Implement `onKBUpdated` subscription
+  - [ ] Set up pub/sub system integration
+  - [ ] Add authentication for subscriptions
+  - [ ] Write subscription tests
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Tasks 6.3.1, 6.3.2, 6.3.3
+  - **Status**: Not Started
+  - **Deliverables**:
+    - graphql/resolvers/SubscriptionResolver.ts
+    - Pub/sub integration
+    - Real-time updates
+    - Tests
+
+---
+
+## 🔄 Phase 7: Workflows (0% Complete)
+
+### 7.1 Article Review Workflow
+- [ ] **Task 7.1.1**: Implement ArticleReviewWorkflow
+  - [ ] Create `workflow/ArticleReviewWorkflow.ts`
+  - [ ] Define workflow steps and state machine
+  - [ ] Implement draft creation step
+  - [ ] Implement submit for review step
+  - [ ] Implement reviewer assignment step
+  - [ ] Implement review and feedback step
+  - [ ] Implement approval/revision logic
+  - [ ] Implement publication step
+  - [ ] Add workflow registration
+  - [ ] Write workflow tests
+  - **Estimated Time**: 12 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - workflow/ArticleReviewWorkflow.ts
+    - State machine definition
+    - Workflow integration
+    - Tests
+
+### 7.2 Knowledge Sync Workflow
+- [ ] **Task 7.2.1**: Implement KnowledgeSyncWorkflow
+  - [ ] Create `workflow/KnowledgeSyncWorkflow.ts`
+  - [ ] Implement external source connection step
+  - [ ] Implement content import step
+  - [ ] Implement data mapping and transformation step
+  - [ ] Implement article creation/update step
+  - [ ] Implement sync scheduling logic
+  - [ ] Add conflict resolution handling
+  - [ ] Add workflow registration
+  - [ ] Write workflow tests
+  - **Estimated Time**: 14 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.2.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - workflow/KnowledgeSyncWorkflow.ts
+    - External source connectors
+    - Sync scheduling
+    - Tests
+
+### 7.3 AI Learning Workflow
+- [ ] **Task 7.3.1**: Implement AILearningWorkflow
+  - [ ] Create `workflow/AILearningWorkflow.ts`
+  - [ ] Implement KB access step
+  - [ ] Implement content extraction step
+  - [ ] Implement content processing and indexing step
+  - [ ] Implement AI model update step
+  - [ ] Implement AI contribution validation step
+  - [ ] Implement audit trail for AI contributions
+  - [ ] Add workflow registration
+  - [ ] Write workflow tests
+  - **Estimated Time**: 12 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 5.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - workflow/AILearningWorkflow.ts
+    - AI validation logic
+    - Audit integration
+    - Tests
+
+---
+
+## 🔍 Phase 8: Search Integration (0% Complete)
+
+### 8.1 MeiliSearch Configuration
+- [ ] **Task 8.1.1**: Configure MeiliSearch indexes
+  - [ ] Create index configuration for KB content
+  - [ ] Configure searchable attributes
+  - [ ] Configure filterable attributes (contentType, status, tags, categories, lng)
+  - [ ] Configure sortable attributes
+  - [ ] Configure ranking rules for relevance
+  - [ ] Configure synonyms and stop words
+  - [ ] Set up index settings per language
+  - [ ] Write index setup scripts
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 3.4.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - MeiliSearch index configuration
+    - Index setup scripts
+    - Multi-language search support
+
+### 8.2 Search Indexing Pipeline
+- [ ] **Task 8.2.1**: Implement search indexing pipeline
+  - [ ] Create indexing hooks in ArticleService
+  - [ ] Implement bulk indexing for existing content
+  - [ ] Implement incremental indexing for updates
+  - [ ] Implement index cleanup for deleted content
+  - [ ] Implement reindexing command
+  - [ ] Add error handling and retry logic
+  - [ ] Write indexing tests
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 8.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - Indexing pipeline
+    - Bulk and incremental indexing
+    - CLI reindex command
+    - Tests
+
+---
+
+## 🎨 Phase 9: Client-Side Components (Forms) (0% Complete)
+
+### 9.1 Reactory Forms
+- [ ] **Task 9.1.1**: Create KnowledgeBaseForm
+  - [ ] Create `forms/KnowledgeBaseForm.ts`
+  - [ ] Define form schema for KB creation/editing
+  - [ ] Define UI schema for form layout
+  - [ ] Add form validation rules
+  - [ ] Add visibility/permission controls
+  - [ ] Add form submission handling
+  - [ ] Export form definition
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - forms/KnowledgeBaseForm.ts
+    - Form schema and UI
+    - Form registration
+
+- [ ] **Task 9.1.2**: Create ArticleForm
+  - [ ] Create `forms/ArticleForm.ts`
+  - [ ] Define form schema for article creation/editing
+  - [ ] Integrate rich text editor component
+  - [ ] Add category and tag selection
+  - [ ] Add localization fields
+  - [ ] Add attachment upload
+  - [ ] Add form validation rules
+  - [ ] Add form submission handling
+  - [ ] Export form definition
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - forms/ArticleForm.ts
+    - Rich text editor integration
+    - Multi-language support
+    - Form registration
+
+- [ ] **Task 9.1.3**: Create ArticleSearchForm
+  - [ ] Create `forms/ArticleSearchForm.ts`
+  - [ ] Define form schema for search interface
+  - [ ] Add search query input
+  - [ ] Add filter controls (categories, tags, status, language)
+  - [ ] Add date range filter
+  - [ ] Add form submission handling
+  - [ ] Export form definition
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - forms/ArticleSearchForm.ts
+    - Search and filter UI
+    - Form registration
+
+- [ ] **Task 9.1.4**: Create CategoryManagementForm
+  - [ ] Create `forms/CategoryManagementForm.ts`
+  - [ ] Define form schema for category creation/editing
+  - [ ] Add category hierarchy selector
+  - [ ] Add form validation rules
+  - [ ] Add form submission handling
+  - [ ] Export form definition
+  - **Estimated Time**: 5 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 6.1.1
+  - **Status**: Not Started
+  - **Deliverables**:
+    - forms/CategoryManagementForm.ts
+    - Category tree UI
+    - Form registration
+
+---
+
+## 🧪 Phase 10: Testing & Quality Assurance (0% Complete)
+
+### 10.1 Unit Tests
+- [ ] **Task 10.1.1**: Ensure unit test coverage for all services
+  - [ ] Review unit test coverage reports
+  - [ ] Add missing unit tests to reach >85% coverage
+  - [ ] Fix failing unit tests
+  - [ ] Add edge case tests
+  - [ ] Test error handling paths
+  - **Estimated Time**: 20 hours
+  - **Assignee**: TBD
+  - **Dependencies**: All service implementation tasks
+  - **Status**: Not Started
+
+### 10.2 Integration Tests
+- [ ] **Task 10.2.1**: Create workflow integration tests
+  - [ ] Test article review workflow end-to-end
+  - [ ] Test knowledge sync workflow end-to-end
+  - [ ] Test AI learning workflow end-to-end
+  - [ ] Test multi-language workflows
+  - **Estimated Time**: 12 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 7 completion
+  - **Status**: Not Started
+
+- [ ] **Task 10.2.2**: Create API integration tests
+  - [ ] Test all GraphQL queries
+  - [ ] Test all GraphQL mutations
+  - [ ] Test GraphQL subscriptions
+  - [ ] Test authentication and authorization
+  - [ ] Test permission enforcement
+  - **Estimated Time**: 14 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 6 completion
+  - **Status**: Not Started
+
+### 10.3 Search Tests
+- [ ] **Task 10.3.1**: Test search functionality
+  - [ ] Test full-text search accuracy
+  - [ ] Test faceted search with filters
+  - [ ] Test multi-language search
+  - [ ] Test search performance with large datasets
+  - [ ] Test search indexing pipeline
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 8 completion
+  - **Status**: Not Started
+
+### 10.4 AI Integration Tests
+- [ ] **Task 10.4.1**: Test AI agent interactions
+  - [ ] Test all KB macros
+  - [ ] Test AI persona configuration
+  - [ ] Test AI content generation
+  - [ ] Test AI content validation
+  - [ ] Test AI knowledge retrieval
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 5 completion
+  - **Status**: Not Started
+
+### 10.5 Performance Tests
+- [ ] **Task 10.5.1**: Run load and performance tests
+  - [ ] Test API response times under load
+  - [ ] Test search performance with large content sets
+  - [ ] Test database query performance
+  - [ ] Test concurrent content operations
+  - [ ] Generate performance reports
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: All implementation phases
+  - **Status**: Not Started
+
+---
+
+## 📚 Phase 11: Documentation & Deployment (30% Complete)
+
+### 11.1 Documentation
+- [x] **Task 11.1.1**: Create module specification
+  - [x] Write comprehensive specification document
+  - [x] Include architecture diagrams
+  - [x] Include data model diagrams
+  - [x] Include API specifications
+  - [x] Include workflow diagrams
+  - **Estimated Time**: 20 hours
+  - **Assignee**: Completed
+  - **Dependencies**: None
+  - **Status**: ✅ Completed
+  - **Completion Date**: November 18, 2025
+  - **Deliverables**:
+    - ✅ SPEC.md with comprehensive technical specification
+    - ✅ Architecture diagrams (Mermaid)
+    - ✅ Content model ER diagrams
+    - ✅ Service layer diagrams
+    - ✅ Data flow diagrams
+
+- [x] **Task 11.1.2**: Create README documentation
+  - [x] Write module overview
+  - [x] Document features and capabilities
+  - [x] Include installation instructions
+  - [x] Document configuration options
+  - [x] Include usage examples
+  - [x] Document GraphQL API
+  - [x] Document services
+  - [x] Include roadmap
+  - **Estimated Time**: 10 hours
+  - **Assignee**: Completed
+  - **Dependencies**: None
+  - **Status**: ✅ Completed
+  - **Completion Date**: November 18, 2025
+  - **Deliverables**:
+    - ✅ README.md with complete module documentation
+    - ✅ Feature descriptions
+    - ✅ API examples
+    - ✅ Configuration guide
+
+- [x] **Task 11.1.3**: Create progress tracker
+  - [x] Define all implementation tasks
+  - [x] Organize tasks by phase
+  - [x] Add task dependencies
+  - [x] Add time estimates
+  - [x] Create milestone tracking
+  - **Estimated Time**: 6 hours
+  - **Assignee**: Completed
+  - **Dependencies**: Tasks 11.1.1, 11.1.2
+  - **Status**: ✅ Completed
+  - **Completion Date**: November 18, 2025
+  - **Deliverables**:
+    - ✅ PROGRESS_TRACKER.md
+
+- [ ] **Task 11.1.4**: Create API documentation
+  - [ ] Document all GraphQL queries and mutations
+  - [ ] Create GraphQL schema documentation
+  - [ ] Add usage examples for all operations
+  - [ ] Create API changelog
+  - [ ] Add authentication documentation
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 6 completion
+  - **Status**: Not Started
+
+- [ ] **Task 11.1.5**: Create developer documentation
+  - [ ] Write getting started guide
+  - [ ] Document module architecture in detail
+  - [ ] Document service interfaces and usage
+  - [ ] Document workflow creation guide
+  - [ ] Document AI macro development
+  - [ ] Add code examples and patterns
+  - [ ] Document testing strategies
+  - **Estimated Time**: 12 hours
+  - **Assignee**: TBD
+  - **Dependencies**: All implementation phases
+  - **Status**: Not Started
+
+- [ ] **Task 11.1.6**: Create user documentation
+  - [ ] Write user guide for creating knowledge bases
+  - [ ] Document article creation and editing
+  - [ ] Document search and discovery features
+  - [ ] Document collaboration features
+  - [ ] Document multi-language content management
+  - [ ] Add troubleshooting section
+  - [ ] Create FAQ
+  - **Estimated Time**: 10 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 9 completion
+  - **Status**: Not Started
+
+### 11.2 CLI Commands
+- [ ] **Task 11.2.1**: Implement CLI commands
+  - [ ] Create `cli/create-kb.ts`
+  - [ ] Create `cli/import-kb.ts`
+  - [ ] Create `cli/export-kb.ts`
+  - [ ] Create `cli/reindex.ts`
+  - [ ] Create `cli/stats.ts`
+  - [ ] Add CLI command registration
+  - [ ] Write CLI documentation
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Phase 3 completion
+  - **Status**: Not Started
+  - **Deliverables**:
+    - cli/ directory with command implementations
+    - CLI command registration
+    - CLI usage documentation
+
+### 11.3 Deployment
+- [ ] **Task 11.3.1**: Create deployment configuration
+  - [ ] Create environment variable templates
+  - [ ] Document deployment prerequisites
+  - [ ] Create deployment checklist
+  - [ ] Document database migration steps
+  - [ ] Document MeiliSearch setup
+  - **Estimated Time**: 6 hours
+  - **Assignee**: TBD
+  - **Dependencies**: All implementation phases
+  - **Status**: Not Started
+
+- [ ] **Task 11.3.2**: Create migration scripts
+  - [ ] Create database migration scripts
+  - [ ] Create data seeding scripts
+  - [ ] Create index initialization scripts
+  - [ ] Create rollback procedures
+  - [ ] Test migration procedures
+  - **Estimated Time**: 8 hours
+  - **Assignee**: TBD
+  - **Dependencies**: Task 11.3.1
+  - **Status**: Not Started
+
+---
+
+## 📝 Notes & Blockers
+
+### Current Blockers
+- None currently identified
+
+### Known Issues
+- None currently identified
+
+### Technical Debt
+- None currently
+
+### Important Findings
+1. **Content Model Extension**: KB builds on existing `IReactoryContent` model
+   - Uses `contentType` field to distinguish KB entities
+   - Leverages existing Content infrastructure
+   - Extends with KB-specific fields (lng, localizedContent, categories, tags)
+
+2. **Multi-language Approach**: Inline localization in Content model
+   - `localizedContent` array stores translations within same document
+   - `lng` field specifies default language
+   - Allows atomic operations and simpler queries
+
+3. **Search Provider**: MeiliSearch already integrated in reactory-core
+   - ReactorySearchService provides abstraction
+   - Multi-language search support
+   - Fast and relevant results
+
+4. **AI Integration Pattern**: Follow Reactor macro pattern
+   - Macros expose service functionality as LLM tools
+   - Persona configuration for specialized AI assistant
+   - Similar to existing Quote agent implementation
+
+### Questions & Clarifications Needed
+1. Should we support automatic translation using external services (Google Translate, DeepL)?
+2. What are the access control requirements for organization-level KBs?
+3. Should we implement content approval workflows in Phase 7 or defer?
+4. What file types should be supported for attachments?
+5. Should we implement real-time collaborative editing or is async collaboration sufficient?
+6. What external sources should Knowledge Sync Workflow support initially?
+
+---
+
+## 🎯 Milestones
+
+| Milestone | Target Date | Status | Completion |
+|-----------|-------------|--------|------------|
+| Planning & Documentation Complete | Nov 18, 2025 | ✅ Complete | 100% |
+| Foundation Complete | TBD | 🔴 Not Started | 0% |
+| Models & Data Layer Complete | TBD | 🔴 Not Started | 0% |
+| Core Services Complete | TBD | 🔴 Not Started | 0% |
+| AI Integration Complete | TBD | 🔴 Not Started | 0% |
+| GraphQL API Complete | TBD | 🔴 Not Started | 0% |
+| Client Forms Complete | TBD | 🔴 Not Started | 0% |
+| Testing Complete | TBD | 🔴 Not Started | 0% |
+| Production Ready | TBD | 🔴 Not Started | 0% |
+
+---
+
+## 📊 Task Summary by Phase
+
+| Phase | Total Tasks | Completed | In Progress | Not Started | % Complete |
+|-------|-------------|-----------|-------------|-------------|------------|
+| Phase 1: Foundation | 5 | 0 | 0 | 5 | 0% |
+| Phase 2: Models | 2 | 0 | 0 | 2 | 0% |
+| Phase 3: Core Services | 6 | 0 | 0 | 6 | 0% |
+| Phase 4: Multi-language | 2 | 0 | 0 | 2 | 0% |
+| Phase 5: AI Integration | 7 | 0 | 0 | 7 | 0% |
+| Phase 6: GraphQL API | 11 | 0 | 0 | 11 | 0% |
+| Phase 7: Workflows | 3 | 0 | 0 | 3 | 0% |
+| Phase 8: Search | 2 | 0 | 0 | 2 | 0% |
+| Phase 9: Client-Side | 4 | 0 | 0 | 4 | 0% |
+| Phase 10: Testing | 5 | 0 | 0 | 5 | 0% |
+| Phase 11: Documentation | 9 | 3 | 0 | 6 | 33% |
+| **TOTAL** | **56** | **3** | **0** | **53** | **5.4%** |
+
+---
+
+## 🔄 Change Log
+
+| Date | Change | Updated By |
+|------|--------|------------|
+| 2025-11-18 | Initial progress tracker created | AI Assistant |
+| 2025-11-18 | ✅ Documentation phase started (README, SPEC completed) | AI Assistant |
+| 2025-11-18 | 📝 Progress tracker created with 11 phases | AI Assistant |
+
+---
+
+## 📞 Team & Contacts
+
+| Role | Name | Contact |
+|------|------|---------|
+| Project Lead | TBD | TBD |
+| Backend Lead | TBD | TBD |
+| Frontend Lead | TBD | TBD |
+| AI/ML Lead | TBD | TBD |
+| QA Lead | TBD | TBD |
+
+---
+
+**Last Updated**: November 18, 2025  
+**Next Review Date**: TBD  
+**Estimated Total Implementation Time**: ~420 hours
+
