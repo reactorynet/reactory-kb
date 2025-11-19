@@ -1,19 +1,32 @@
-import Reactory from '@reactory/reactory-core';
-
 /**
- * Knowledge Base Models
+ * Knowledge Base Models Index
  * 
- * Mongoose models for KB entities:
- * - KnowledgeBase: Core KB entity
- * - Article: Knowledge articles
- * - Category: Categorization system
- * - Tag: Tagging system
- * - Permission: Access control
- * - Version: Article history
- * - Comment: Article comments
- * - Bookmark: User bookmarks
+ * Central export point for all KB models
  */
 
-const models: Reactory.Models.IReactoryModel<unknown>[] = [];
+import KBVersion from './KBVersion';
+import KBComment from './KBComment';
+import KBBookmark from './KBBookmark';
+import KBAttachment from './KBAttachment';
 
-export default models;
+// Export models
+export {
+  KBVersion,
+  KBComment,
+  KBBookmark,
+  KBAttachment,
+};
+
+// Export document interfaces
+export type { IKBVersionDocument } from './KBVersion';
+export type { IKBCommentDocument } from './KBComment';
+export type { IKBBookmarkDocument } from './KBBookmark';
+export type { IKBAttachmentDocument } from './KBAttachment';
+
+// Export for module registration
+export default [
+  KBVersion,
+  KBComment,
+  KBBookmark,
+  KBAttachment,
+];
