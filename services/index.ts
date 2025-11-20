@@ -6,11 +6,38 @@ import Reactory from '@reactory/reactory-core';
  * Core business logic services for knowledge base operations:
  * - KnowledgeBaseService: Manage KB entities
  * - ArticleService: Manage articles
+ * - CategoryService: Manage categories
  * - SearchService: Full-text search
  * - CollaborationService: Multi-user features
- * - AIIntegrationService: AI agent interactions
+ * - PermissionService: Access control
+ * - LocalizationService: Multi-language support (TODO)
+ * - AIIntegrationService: AI agent interactions (TODO)
  */
 
-const services: Reactory.Server.IReactoryServiceDefinition[] = [];
+import KnowledgeBaseService from './KnowledgeBaseService';
+import ArticleService from './ArticleService';
+import CategoryService from './CategoryService';
+import SearchService from './SearchService';
+import CollaborationService from './CollaborationService';
+import PermissionService from './PermissionService';
+// import LocalizationService from './LocalizationService';
+// import AIIntegrationService from './AIIntegrationService';
+
+const services: Reactory.Server.IReactoryServiceDefinition[] = [
+  KnowledgeBaseService.reactory,
+  ArticleService.reactory,
+  CategoryService.reactory,
+  SearchService.reactory,
+  CollaborationService.reactory,
+  PermissionService.reactory,
+];
 
 export default services;
+export {
+  KnowledgeBaseService,
+  ArticleService,
+  CategoryService,
+  SearchService,
+  CollaborationService,
+  PermissionService,
+};
