@@ -1,16 +1,17 @@
 /**
- * Knowledge Base GraphQL Type Definitions
+ * Knowledge Base GraphQL Types
  * 
- * GraphQL types for KB entities:
- * - KnowledgeBase
- * - Article
- * - Category
- * - Tag
- * - Permission
- * - KBVisibility enum
- * - ArticleStatus enum
+ * Loads GraphQL type definitions from .graphql files
  */
 
-const types: string[] = [];
+import { loadGraphQLTypeDefinitions } from '@reactory/server-core/graph/graphql-loader';
 
-export default types;
+const KBTypeDefinitions = loadGraphQLTypeDefinitions([
+  'KB/Enums',
+  'KB/Types',
+  'KB/Inputs',
+  'KB/Queries',
+  'KB/Mutations',
+], __dirname, 'KnowledgeBase');
+
+export default KBTypeDefinitions;

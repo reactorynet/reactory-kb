@@ -1,0 +1,105 @@
+"""
+Create Knowledge Base Input
+"""
+input CreateKBInput {
+  title: String!
+  description: String
+  lng: String!
+  tags: [String!]
+  visibility: KBVisibility
+}
+
+"""
+Update Knowledge Base Input
+"""
+input UpdateKBInput {
+  title: String
+  description: String
+  lng: String
+  tags: [String!]
+  visibility: KBVisibility
+  status: KBArticleStatus
+}
+
+"""
+Create Article Input
+"""
+input CreateArticleInput {
+  kbId: ID!
+  title: String!
+  content: String!
+  lng: String!
+  description: String
+  tags: [String!]
+  categories: [String!]
+  localizedContent: [LocalizedContentInput!]
+}
+
+"""
+Update Article Input
+"""
+input UpdateArticleInput {
+  title: String
+  content: String
+  lng: String
+  description: String
+  tags: [String!]
+  categories: [String!]
+  status: KBArticleStatus
+}
+
+"""
+Localized Content Input
+"""
+input LocalizedContentInput {
+  lng: String!
+  title: String!
+  content: String!
+  summary: String
+  description: String
+  published: Boolean
+}
+
+"""
+Permission Input
+"""
+input PermissionInput {
+  userId: String
+  role: String
+  permission: PermissionType!
+}
+
+"""
+Search Query Input
+"""
+input SearchQueryInput {
+  query: String!
+  filters: SearchFiltersInput
+  sortBy: String
+  sortDirection: SortDirection
+  limit: Int
+  offset: Int
+}
+
+"""
+Search Filters Input
+"""
+input SearchFiltersInput {
+  contentType: KBContentType
+  kbId: ID
+  status: KBArticleStatus
+  tags: [String!]
+  lng: String
+  authorId: ID
+}
+
+"""
+KB Filter Input
+"""
+input KBFilterInput {
+  visibility: KBVisibility
+  tags: [String!]
+  limit: Int
+  offset: Int
+}
+

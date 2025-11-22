@@ -21,7 +21,7 @@ import SearchService from './SearchService';
 import CollaborationService from './CollaborationService';
 import PermissionService from './PermissionService';
 import LocalizationService from './LocalizationService';
-// import AIIntegrationService from './AIIntegrationService';
+import AIIntegrationService from './AIIntegrationService';
 
 const services: Reactory.Service.IReactoryService[] = [
   KnowledgeBaseService.reactory,
@@ -31,6 +31,7 @@ const services: Reactory.Service.IReactoryService[] = [
   CollaborationService.reactory,
   PermissionService.reactory,
   LocalizationService.reactory,
+  AIIntegrationService.reactory,
 ];
 
 export default services;
@@ -42,4 +43,5 @@ export {
   CollaborationService,
   PermissionService,
   LocalizationService,
+  AIIntegrationService,
 };

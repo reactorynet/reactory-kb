@@ -1,0 +1,200 @@
+"""
+Knowledge Base Content Type
+Represents a knowledge base or article in the system
+"""
+type KBContent {
+  id: ID!
+  slug: String!
+  contentType: String!
+  lng: String
+  title: String!
+  description: String
+  content: String!
+  localizedContent: [KBLocalizedContent!]
+  status: String
+  tags: [String!]
+  categories: [String!]
+  knowledgeBase: String
+  author: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  published: Boolean!
+  version: String
+  attachments: [KBAttachment!]
+  comments: [KBComment!]
+  bookmarks: [KBBookmark!]
+  viewCount: Int
+  lastViewed: DateTime
+  allowComments: Boolean
+  visibility: String
+  permissions: [KBPermission!]
+}
+
+"""
+Localized Content
+Represents a translated version of content
+"""
+type KBLocalizedContent {
+  lng: String!
+  title: String
+  content: String
+  summary: String
+  description: String
+  published: Boolean!
+  created: DateTime!
+  modified: DateTime!
+  modifiedBy: String
+}
+
+"""
+Category
+Hierarchical organization for articles
+"""
+type KBCategory {
+  id: ID!
+  name: String!
+  description: String
+  slug: String!
+  parent: String
+  children: [String!]
+  articleCount: Int
+  order: Int
+}
+
+"""
+Comment
+User comments on articles
+"""
+type KBComment {
+  id: ID!
+  contentId: String!
+  author: User!
+  content: String!
+  parent: String
+  replies: [KBComment!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+Bookmark
+User bookmarks for quick access
+"""
+type KBBookmark {
+  id: ID!
+  userId: String!
+  contentId: String!
+  note: String
+  tags: [String!]
+  createdAt: DateTime!
+}
+
+"""
+Attachment
+File attachments to articles
+"""
+type KBAttachment {
+  id: ID!
+  contentId: String!
+  filename: String!
+  mimetype: String!
+  size: Int!
+  url: String!
+  uploadedBy: User!
+  uploadedAt: DateTime!
+}
+
+"""
+Permission
+Access control for content
+"""
+type KBPermission {
+  id: ID!
+  contentId: String!
+  userId: String
+  role: String
+  permission: PermissionType!
+  grantedBy: User!
+  grantedAt: DateTime!
+}
+
+"""
+Version
+Article version history
+"""
+type KBVersion {
+  id: ID!
+  contentId: String!
+  versionNumber: Int!
+  changeSummary: String
+  content: String!
+  summary: String
+  author: User!
+  createdAt: DateTime!
+}
+
+"""
+Search Result
+Search results with metadata
+"""
+type KBSearchResult {
+  total: Int!
+  results: [KBContent!]!
+  facets: KBSearchFacets
+  took: Int
+}
+
+"""
+Search Facets
+Aggregated search metadata
+"""
+type KBSearchFacets {
+  contentTypes: [FacetCount!]
+  tags: [FacetCount!]
+  languages: [FacetCount!]
+  authors: [FacetCount!]
+}
+
+"""
+Facet Count
+Count for a facet value
+"""
+type FacetCount {
+  value: String!
+  count: Int!
+}
+
+"""
+Activity
+Content activity tracking
+"""
+type KBActivity {
+  id: ID!
+  contentId: String!
+  userId: String!
+  action: String!
+  metadata: JSONObject
+  timestamp: DateTime!
+}
+
+"""
+Knowledge Base Statistics
+"""
+type KBStats {
+  totalArticles: Int!
+  totalViews: Int!
+  totalComments: Int!
+  totalBookmarks: Int!
+  averageRating: Float
+  languageCounts: [LanguageCount!]
+  recentActivity: [KBActivity!]
+}
+
+"""
+Language Count
+"""
+type LanguageCount {
+  language: String!
+  count: Int!
+}
+

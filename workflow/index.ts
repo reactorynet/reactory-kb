@@ -1,14 +1,19 @@
-import Reactory from '@reactory/reactory-core';
-
 /**
  * Knowledge Base Workflows
  * 
- * Workflow definitions:
- * - ArticleReviewWorkflow: Review and approval process
- * - KnowledgeSyncWorkflow: External source synchronization
- * - AILearningWorkflow: AI agent learning process
+ * Export workflow definitions for the KB module
  */
 
-const workflows: Reactory.Workflow.IReactoryWorkflow[] = [];
+import ArticleReviewWorkflow from './ArticleReviewWorkflow';
+import KnowledgeSyncWorkflow from './KnowledgeSyncWorkflow';
+
+const workflows = [
+  ArticleReviewWorkflow,
+  KnowledgeSyncWorkflow,
+];
 
 export default workflows;
+export {
+  ArticleReviewWorkflow,
+  KnowledgeSyncWorkflow,
+};

@@ -1,0 +1,102 @@
+extend type Mutation {
+  """
+  Create a new knowledge base
+  """
+  createKnowledgeBase(input: CreateKBInput!): KBContent!
+
+  """
+  Update a knowledge base
+  """
+  updateKnowledgeBase(id: ID!, input: UpdateKBInput!): KBContent!
+
+  """
+  Delete a knowledge base
+  """
+  deleteKnowledgeBase(id: ID!): Boolean!
+
+  """
+  Share a knowledge base with users/roles
+  """
+  shareKnowledgeBase(id: ID!, permissions: [PermissionInput!]!): KBContent!
+
+  """
+  Create a new article
+  """
+  createArticle(input: CreateArticleInput!): KBContent!
+
+  """
+  Update an article
+  """
+  updateArticle(id: ID!, input: UpdateArticleInput!): KBContent!
+
+  """
+  Delete an article
+  """
+  deleteArticle(id: ID!): Boolean!
+
+  """
+  Publish an article
+  """
+  publishArticle(id: ID!): KBContent!
+
+  """
+  Archive an article
+  """
+  archiveArticle(id: ID!): KBContent!
+
+  """
+  Add localized content to an article
+  """
+  addLocalizedContent(id: ID!, localized: LocalizedContentInput!): KBContent!
+
+  """
+  Remove localized content from an article
+  """
+  removeLocalizedContent(id: ID!, lng: String!): KBContent!
+
+  """
+  Add a comment to content
+  """
+  addComment(contentId: ID!, content: String!, parent: ID): KBComment!
+
+  """
+  Update a comment
+  """
+  updateComment(id: ID!, content: String!): KBComment!
+
+  """
+  Delete a comment
+  """
+  deleteComment(id: ID!): Boolean!
+
+  """
+  Add a bookmark
+  """
+  addBookmark(contentId: ID!, note: String, tags: [String!]): KBBookmark!
+
+  """
+  Remove a bookmark
+  """
+  removeBookmark(id: ID!): Boolean!
+
+  """
+  Like content
+  """
+  likeContent(contentId: ID!): Boolean!
+
+  """
+  Unlike content
+  """
+  unlikeContent(contentId: ID!): Boolean!
+
+  """
+  Upload attachment
+  """
+  uploadAttachment(contentId: ID!, file: Upload!): KBAttachment!
+
+  """
+  Delete attachment
+  """
+  deleteAttachment(id: ID!): Boolean!
+}
+

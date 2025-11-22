@@ -1,0 +1,61 @@
+"""
+Content Type Enum
+"""
+enum KBContentType {
+  KNOWLEDGE_BASE
+  ARTICLE
+  CATEGORY
+  TEMPLATE
+}
+
+"""
+Article Status Enum
+"""
+enum KBArticleStatus {
+  DRAFT
+  UNDER_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+"""
+Visibility Enum
+"""
+enum KBVisibility {
+  PRIVATE
+  PUBLIC
+  SHARED
+  ORGANIZATION
+}
+
+"""
+Permission Type Enum
+"""
+enum PermissionType {
+  READ
+  WRITE
+  ADMIN
+  OWNER
+}
+
+"""
+Activity Action Enum
+"""
+enum KBActivityAction {
+  VIEW
+  EDIT
+  COMMENT
+  BOOKMARK
+  SHARE
+  PUBLISH
+  ARCHIVE
+}
+
+"""
+Sort Direction Enum
+"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
