@@ -173,7 +173,7 @@ type KBActivity {
   contentId: String!
   userId: String!
   action: String!
-  metadata: JSONObject
+  metadata: Any
   timestamp: DateTime!
 }
 
