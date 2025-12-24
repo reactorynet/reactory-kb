@@ -2,7 +2,7 @@ import Reactory from '@reactory/reactory-core';
 import clis from './cli';
 import resolvers from './graphql/resolvers';
 import types from './graphql/types';
-import workflows from './workflow';
+import workflows from './workflows';
 import forms from './forms';
 import models from './models';
 import services from './services';

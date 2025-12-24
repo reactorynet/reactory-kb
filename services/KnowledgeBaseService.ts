@@ -222,7 +222,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
     try {
       logger.debug(`Updating knowledge base ${id}:`, input);
 
-      const kb = await Content.findOne({
+      const kb: IKBContent = await Content.findOne({
         _id: id,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -247,7 +247,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       if (input.status) (kb as any).status = input.status;
       if (input.visibility) (kb as any).visibility = input.visibility;
       if (input.metadata) {
-        kb.set('metadata', input.metadata);
+        kb.metadata = { ...kb.metadata, ...input.metadata };
       }
 
       kb.updatedAt = new Date();
@@ -691,5 +691,3 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 }
 
 export default KnowledgeBaseService;
-export { IKnowledgeBaseService };
-
