@@ -21,7 +21,7 @@ type KBContent {
   published: Boolean!
   version: String
   attachments: [KBAttachment!]
-  comments: [KBComment!]
+  comments: [Comment!]
   bookmarks: [KBBookmark!]
   viewCount: Int
   lastViewed: DateTime
@@ -59,21 +59,6 @@ type KBCategory {
   children: [String!]
   articleCount: Int
   order: Int
-}
-
-"""
-Comment
-User comments on articles
-"""
-type KBComment {
-  id: ID!
-  contentId: String!
-  author: User!
-  content: String!
-  parent: String
-  replies: [KBComment!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 """

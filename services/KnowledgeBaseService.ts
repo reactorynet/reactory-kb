@@ -19,7 +19,7 @@ import {
   KBVisibility,
   KBArticleStatus,
 } from '../types';
-import { ObjectId } from 'mongoose';
+
 
 /**
  * Knowledge Base Service Interface

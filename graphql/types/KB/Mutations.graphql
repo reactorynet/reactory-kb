@@ -52,22 +52,7 @@ extend type Mutation {
   """
   Remove localized content from an article
   """
-  removeLocalizedContent(id: ID!, lng: String!): KBContent!
-
-  """
-  Add a comment to content
-  """
-  addComment(contentId: ID!, content: String!, parent: ID): KBComment!
-
-  """
-  Update a comment
-  """
-  updateComment(id: ID!, content: String!): KBComment!
-
-  """
-  Delete a comment
-  """
-  deleteComment(id: ID!): Boolean!
+  removeLocalizedContent(id: ID!, lng: String!): KBContent!  
 
   """
   Add a bookmark

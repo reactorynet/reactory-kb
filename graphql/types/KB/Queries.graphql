@@ -57,7 +57,7 @@ extend type Query {
   """
   Get comments for content
   """
-  getComments(contentId: ID!): [KBComment!]!
+  getComments(contentId: ID!): [Comment!]!
 
   """
   Get user bookmarks

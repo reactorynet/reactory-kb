@@ -6,6 +6,6 @@ import Reactory from '@reactory/reactory-core';
  * Provides command-line interface tools for managing knowledge bases
  */
 
-const clis: Reactory.Server.IReactoryCLI[] = [];
+const clis: Reactory.Server.TCli[] = [];
 
 export default clis;

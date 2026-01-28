@@ -216,12 +216,12 @@ class InitializeKBContext extends CollectSystemDocsStep {
 class DiscoverREADMEFiles extends CollectSystemDocsStep {
   private readonly DEFAULT_SCAN_PATHS = [
     // Core platform
-    'README.md',
-    'src/modules/*/README.md',
+    'README.md',    
+    'src/modules/*/README.md',    
     'src/modules/*/workflow/*/README.md',
     'src/modules/*/services/README.md',
     'src/modules/*/models/*/README.md',
-    'src/modules/*/routes/README.md',
+    'src/modules/*/routes/README.md'    
   ];
   
   private readonly DEFAULT_EXCLUDE = [
