@@ -1,0 +1,177 @@
+{
+  "kb": {
+    "common": {
+      "knowledgeBase": "Base de Conocimientos",
+      "article": "Artículo",
+      "category": "Categoría",
+      "tag": "Etiqueta",
+      "search": "Buscar",
+      "create": "Crear",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "publish": "Publicar",
+      "draft": "Borrador",
+      "archived": "Archivado",
+      "loading": "Cargando...",
+      "error": "Error",
+      "success": "Éxito",
+      "language": "Idioma",
+      "translation": "Traducción"
+    },
+    "knowledgeBase": {
+      "title": "Bases de Conocimientos",
+      "create": "Crear Base de Conocimientos",
+      "edit": "Editar Base de Conocimientos",
+      "delete": "Eliminar Base de Conocimientos",
+      "settings": "Configuración de Base de Conocimientos",
+      "statistics": "Estadísticas",
+      "myKnowledgeBases": "Mis Bases de Conocimientos",
+      "sharedWithMe": "Compartido Conmigo",
+      "publicKnowledgeBases": "Bases de Conocimientos Públicas",
+      "organizationKnowledgeBases": "Bases de Conocimientos de la Organización",
+      "visibility": {
+        "label": "Visibilidad",
+        "private": "Privado",
+        "public": "Público",
+        "shared": "Compartido",
+        "organization": "Organización"
+      },
+      "messages": {
+        "createSuccess": "Base de conocimientos creada con éxito",
+        "updateSuccess": "Base de conocimientos actualizada con éxito",
+        "deleteSuccess": "Base de conocimientos eliminada con éxito",
+        "deleteConfirm": "¿Está seguro de que desea eliminar esta base de conocimientos? Esta acción no se puede deshacer.",
+        "noArticles": "Aún no hay artículos en esta base de conocimientos"
+      }
+    },
+    "article": {
+      "title": "Artículos",
+      "create": "Crear Artículo",
+      "edit": "Editar Artículo",
+      "delete": "Eliminar Artículo",
+      "publish": "Publicar Artículo",
+      "archive": "Archivar Artículo",
+      "restore": "Restaurar Artículo",
+      "viewHistory": "Ver Historial",
+      "versions": "Versiones",
+      "currentVersion": "Versión Actual",
+      "revertTo": "Revertir a Versión",
+      "status": {
+        "label": "Estado",
+        "draft": "Borrador",
+        "underReview": "En Revisión",
+        "published": "Publicado",
+        "archived": "Archivado"
+      },
+      "metadata": {
+        "author": "Autor",
+        "createdAt": "Creado",
+        "updatedAt": "Última Actualización",
+        "publishedAt": "Publicado",
+        "viewCount": "Vistas",
+        "readingTime": "Tiempo de Lectura",
+        "difficulty": "Dificultad"
+      },
+      "fields": {
+        "title": "Título",
+        "content": "Contenido",
+        "summary": "Resumen",
+        "description": "Descripción",
+        "tags": "Etiquetas",
+        "categories": "Categorías",
+        "language": "Idioma",
+        "attachments": "Adjuntos"
+      },
+      "messages": {
+        "createSuccess": "Artículo creado con éxito",
+        "updateSuccess": "Artículo actualizado con éxito",
+        "deleteSuccess": "Artículo eliminado con éxito",
+        "publishSuccess": "Artículo publicado con éxito",
+        "archiveSuccess": "Artículo archivado con éxito",
+        "restoreSuccess": "Artículo restaurado con éxito",
+        "deleteConfirm": "¿Está seguro de que desea eliminar este artículo?",
+        "publishConfirm": "¿Está seguro de que desea publicar este artículo?",
+        "archiveConfirm": "¿Está seguro de que desea archivar este artículo?"
+      }
+    },
+    "category": {
+      "title": "Categorías",
+      "create": "Crear Categoría",
+      "edit": "Editar Categoría",
+      "delete": "Eliminar Categoría",
+      "move": "Mover Categoría",
+      "merge": "Combinar Categorías",
+      "parentCategory": "Categoría Padre",
+      "subcategories": "Subcategorías",
+      "articleCount": "Artículos",
+      "messages": {
+        "createSuccess": "Categoría creada con éxito",
+        "updateSuccess": "Categoría actualizada con éxito",
+        "deleteSuccess": "Categoría eliminada con éxito",
+        "deleteConfirm": "¿Está seguro de que desea eliminar esta categoría?",
+        "moveSuccess": "Categoría movida con éxito"
+      }
+    },
+    "search": {
+      "placeholder": "Buscar artículos...",
+      "results": "Resultados de Búsqueda",
+      "noResults": "No se encontraron resultados",
+      "showing": "Mostrando {count} resultados",
+      "filters": "Filtros",
+      "sortBy": "Ordenar Por",
+      "relevance": "Relevancia",
+      "dateCreated": "Fecha de Creación",
+      "dateUpdated": "Fecha de Actualización",
+      "viewCount": "Más Vistos",
+      "suggestions": "Quizás quisiste decir:",
+      "advanced": "Búsqueda Avanzada"
+    },
+    "localization": {
+      "title": "Localización",
+      "addTranslation": "Agregar Traducción",
+      "editTranslation": "Editar Traducción",
+      "removeTranslation": "Eliminar Traducción",
+      "availableLanguages": "Idiomas Disponibles",
+      "missingTranslations": "Traducciones Faltantes",
+      "translationStatus": "Estado de Traducción",
+      "completeness": "Completitud",
+      "messages": {
+        "addSuccess": "Traducción agregada con éxito",
+        "updateSuccess": "Traducción actualizada con éxito",
+        "removeSuccess": "Traducción eliminada con éxito",
+        "removeConfirm": "¿Está seguro de que desea eliminar esta traducción?"
+      }
+    },
+    "ai": {
+      "title": "Asistente IA",
+      "generate": "Generar Contenido",
+      "summarize": "Resumir",
+      "translate": "Traducir",
+      "suggestions": "Sugerencias de IA",
+      "enhance": "Mejorar Contenido",
+      "validate": "Validar Contenido",
+      "confidence": "Confianza",
+      "reviewing": "IA está revisando...",
+      "generating": "IA está generando...",
+      "messages": {
+        "generateSuccess": "Contenido generado con éxito",
+        "summarizeSuccess": "Resumen generado con éxito",
+        "translateSuccess": "Traducción completada con éxito",
+        "enhanceSuccess": "Contenido mejorado con éxito",
+        "validationComplete": "Validación completa",
+        "requiresReview": "El contenido generado por IA requiere revisión humana antes de publicarse"
+      }
+    },
+    "errors": {
+      "general": "Ocurrió un error. Por favor, inténtelo de nuevo.",
+      "notFound": "El recurso solicitado no se encontró.",
+      "unauthorized": "No está autorizado para realizar esta acción.",
+      "forbidden": "Acceso prohibido.",
+      "validationError": "Por favor, verifique su entrada e inténtelo de nuevo.",
+      "networkError": "Error de red. Por favor, verifique su conexión."
+    }
+  }
+}
+

@@ -417,7 +417,7 @@ type KBContent implements ReactoryContent {
   viewCount: Int
   lastViewed: DateTime
   allowComments: Boolean
-  metadata: JSONObject
+  metadata: Any
 }
 
 type KBLocalizedContent {
@@ -617,7 +617,7 @@ input CreateKBInput {
   tags: [String!]
   categories: [String!]
   permissions: [PermissionInput!]
-  metadata: JSONObject
+  metadata: Any
 }
 
 input UpdateKBInput {
@@ -627,7 +627,7 @@ input UpdateKBInput {
   tags: [String!]
   categories: [String!]
   status: KBArticleStatus
-  metadata: JSONObject
+  metadata: Any
 }
 
 input CreateArticleInput {
@@ -640,7 +640,7 @@ input CreateArticleInput {
   categories: [String!]
   localizedContent: [LocalizedContentInput!]
   attachments: [Upload!]
-  metadata: JSONObject
+  metadata: Any
 }
 
 input UpdateArticleInput {
@@ -653,7 +653,7 @@ input UpdateArticleInput {
   categories: [String!]
   status: KBArticleStatus
   localizedContent: [LocalizedContentInput!]
-  metadata: JSONObject
+  metadata: Any
 }
 
 input LocalizedContentInput {

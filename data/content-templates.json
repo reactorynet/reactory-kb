@@ -1,0 +1,323 @@
+{
+  "templates": [
+    {
+      "id": "basic-article",
+      "name": "Basic Article",
+      "description": "Simple article template with standard sections",
+      "lng": "en",
+      "contentType": "template",
+      "content": "# {{title}}\n\n## Introduction\n\n{{introduction}}\n\n## Main Content\n\n{{content}}\n\n## Conclusion\n\n{{conclusion}}",
+      "sections": [
+        {
+          "id": "title",
+          "name": "Title",
+          "description": "Article title",
+          "order": 1,
+          "required": true
+        },
+        {
+          "id": "introduction",
+          "name": "Introduction",
+          "description": "Brief introduction to the topic",
+          "order": 2,
+          "required": true
+        },
+        {
+          "id": "content",
+          "name": "Main Content",
+          "description": "Main article content",
+          "order": 3,
+          "required": true
+        },
+        {
+          "id": "conclusion",
+          "name": "Conclusion",
+          "description": "Summary and conclusion",
+          "order": 4,
+          "required": false
+        }
+      ],
+      "customFields": [
+        {
+          "id": "difficulty",
+          "name": "difficulty",
+          "label": "Difficulty Level",
+          "type": "select",
+          "required": false,
+          "options": ["beginner", "intermediate", "advanced"]
+        }
+      ]
+    },
+    {
+      "id": "how-to-guide",
+      "name": "How-To Guide",
+      "description": "Step-by-step tutorial or guide template",
+      "lng": "en",
+      "contentType": "template",
+      "content": "# How to {{title}}\n\n## What You'll Need\n\n{{prerequisites}}\n\n## Steps\n\n{{steps}}\n\n## Tips & Tricks\n\n{{tips}}\n\n## Troubleshooting\n\n{{troubleshooting}}",
+      "sections": [
+        {
+          "id": "title",
+          "name": "Title",
+          "description": "What the guide teaches",
+          "order": 1,
+          "required": true
+        },
+        {
+          "id": "prerequisites",
+          "name": "Prerequisites",
+          "description": "What's needed before starting",
+          "order": 2,
+          "required": true
+        },
+        {
+          "id": "steps",
+          "name": "Steps",
+          "description": "Step-by-step instructions",
+          "order": 3,
+          "required": true
+        },
+        {
+          "id": "tips",
+          "name": "Tips & Tricks",
+          "description": "Helpful tips",
+          "order": 4,
+          "required": false
+        },
+        {
+          "id": "troubleshooting",
+          "name": "Troubleshooting",
+          "description": "Common problems and solutions",
+          "order": 5,
+          "required": false
+        }
+      ],
+      "customFields": [
+        {
+          "id": "estimatedTime",
+          "name": "estimatedTime",
+          "label": "Estimated Time",
+          "type": "text",
+          "required": false
+        },
+        {
+          "id": "difficulty",
+          "name": "difficulty",
+          "label": "Difficulty Level",
+          "type": "select",
+          "required": false,
+          "options": ["beginner", "intermediate", "advanced"]
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "name": "FAQ",
+      "description": "Frequently Asked Questions template",
+      "lng": "en",
+      "contentType": "template",
+      "content": "# {{title}} - FAQ\n\n## Overview\n\n{{overview}}\n\n## Questions\n\n{{questions}}",
+      "sections": [
+        {
+          "id": "title",
+          "name": "Title",
+          "description": "FAQ topic",
+          "order": 1,
+          "required": true
+        },
+        {
+          "id": "overview",
+          "name": "Overview",
+          "description": "Brief overview of the topic",
+          "order": 2,
+          "required": false
+        },
+        {
+          "id": "questions",
+          "name": "Questions",
+          "description": "Q&A pairs (use ### for each question)",
+          "order": 3,
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "api-documentation",
+      "name": "API Documentation",
+      "description": "API endpoint documentation template",
+      "lng": "en",
+      "contentType": "template",
+      "content": "# {{title}}\n\n## Description\n\n{{description}}\n\n## Endpoint\n\n`{{method}} {{endpoint}}`\n\n## Parameters\n\n{{parameters}}\n\n## Request Body\n\n{{requestBody}}\n\n## Response\n\n{{response}}\n\n## Examples\n\n{{examples}}\n\n## Error Codes\n\n{{errorCodes}}",
+      "sections": [
+        {
+          "id": "title",
+          "name": "API Name",
+          "description": "Name of the API endpoint",
+          "order": 1,
+          "required": true
+        },
+        {
+          "id": "description",
+          "name": "Description",
+          "description": "What the API does",
+          "order": 2,
+          "required": true
+        },
+        {
+          "id": "method",
+          "name": "HTTP Method",
+          "description": "GET, POST, PUT, DELETE, etc.",
+          "order": 3,
+          "required": true
+        },
+        {
+          "id": "endpoint",
+          "name": "Endpoint URL",
+          "description": "API endpoint path",
+          "order": 4,
+          "required": true
+        },
+        {
+          "id": "parameters",
+          "name": "Parameters",
+          "description": "Query or path parameters",
+          "order": 5,
+          "required": false
+        },
+        {
+          "id": "requestBody",
+          "name": "Request Body",
+          "description": "Request body schema",
+          "order": 6,
+          "required": false
+        },
+        {
+          "id": "response",
+          "name": "Response",
+          "description": "Response schema",
+          "order": 7,
+          "required": true
+        },
+        {
+          "id": "examples",
+          "name": "Examples",
+          "description": "Usage examples",
+          "order": 8,
+          "required": true
+        },
+        {
+          "id": "errorCodes",
+          "name": "Error Codes",
+          "description": "Possible error responses",
+          "order": 9,
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "release-notes",
+      "name": "Release Notes",
+      "description": "Software release notes template",
+      "lng": "en",
+      "contentType": "template",
+      "content": "# Release {{version}} - {{date}}\n\n## What's New\n\n{{newFeatures}}\n\n## Improvements\n\n{{improvements}}\n\n## Bug Fixes\n\n{{bugFixes}}\n\n## Breaking Changes\n\n{{breakingChanges}}\n\n## Upgrade Guide\n\n{{upgradeGuide}}",
+      "sections": [
+        {
+          "id": "version",
+          "name": "Version",
+          "description": "Release version number",
+          "order": 1,
+          "required": true
+        },
+        {
+          "id": "date",
+          "name": "Release Date",
+          "description": "Date of release",
+          "order": 2,
+          "required": true
+        },
+        {
+          "id": "newFeatures",
+          "name": "New Features",
+          "description": "New features added",
+          "order": 3,
+          "required": false
+        },
+        {
+          "id": "improvements",
+          "name": "Improvements",
+          "description": "Enhancements to existing features",
+          "order": 4,
+          "required": false
+        },
+        {
+          "id": "bugFixes",
+          "name": "Bug Fixes",
+          "description": "Bugs fixed in this release",
+          "order": 5,
+          "required": false
+        },
+        {
+          "id": "breakingChanges",
+          "name": "Breaking Changes",
+          "description": "Changes that break backward compatibility",
+          "order": 6,
+          "required": false
+        },
+        {
+          "id": "upgradeGuide",
+          "name": "Upgrade Guide",
+          "description": "Steps to upgrade from previous version",
+          "order": 7,
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "glossary-entry",
+      "name": "Glossary Entry",
+      "description": "Definition and explanation of a term",
+      "lng": "en",
+      "contentType": "template",
+      "content": "# {{term}}\n\n## Definition\n\n{{definition}}\n\n## Explanation\n\n{{explanation}}\n\n## Examples\n\n{{examples}}\n\n## Related Terms\n\n{{relatedTerms}}",
+      "sections": [
+        {
+          "id": "term",
+          "name": "Term",
+          "description": "The term being defined",
+          "order": 1,
+          "required": true
+        },
+        {
+          "id": "definition",
+          "name": "Definition",
+          "description": "Brief definition",
+          "order": 2,
+          "required": true
+        },
+        {
+          "id": "explanation",
+          "name": "Explanation",
+          "description": "Detailed explanation",
+          "order": 3,
+          "required": true
+        },
+        {
+          "id": "examples",
+          "name": "Examples",
+          "description": "Usage examples",
+          "order": 4,
+          "required": false
+        },
+        {
+          "id": "relatedTerms",
+          "name": "Related Terms",
+          "description": "Related or similar terms",
+          "order": 5,
+          "required": false
+        }
+      ]
+    }
+  ]
+}
+

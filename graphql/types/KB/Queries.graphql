@@ -1,0 +1,72 @@
+extend type Query {
+  """
+  Get a knowledge base by ID
+  """
+  getKnowledgeBase(id: ID!): KBContent
+
+  """
+  List knowledge bases with optional filtering
+  """
+  listKnowledgeBases(filter: KBFilterInput): [KBContent!]!
+
+  """
+  Get articles for a knowledge base
+  """
+  getKBArticles(kbId: ID!, filter: KBFilterInput): [KBContent!]!
+
+  """
+  Get categories for a knowledge base
+  """
+  getKBCategories(kbId: ID!): [KBCategory!]!
+
+  """
+  Get KB statistics
+  """
+  getKBStats(kbId: ID!): KBStats
+
+  """
+  Get an article by ID
+  """
+  getArticle(id: ID!): KBContent
+
+  """
+  Get article versions
+  """
+  getArticleVersions(id: ID!): [KBVersion!]!
+
+  """
+  Get localized article content
+  """
+  getLocalizedArticle(id: ID!, lng: String!): KBLocalizedContent
+
+  """
+  Search knowledge bases
+  """
+  searchKnowledgeBases(query: SearchQueryInput!): KBSearchResult!
+
+  """
+  Search articles
+  """
+  searchArticles(query: SearchQueryInput!): KBSearchResult!
+
+  """
+  Get search suggestions
+  """
+  getSearchSuggestions(query: String!, limit: Int): [String!]!
+
+  """
+  Get comments for content
+  """
+  getComments(contentId: ID!): [Comment!]!
+
+  """
+  Get user bookmarks
+  """
+  getUserBookmarks(userId: ID): [KBBookmark!]!
+
+  """
+  Get content activity
+  """
+  getContentActivity(contentId: ID!, limit: Int): [KBActivity!]!
+}
+

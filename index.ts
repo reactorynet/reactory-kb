@@ -2,12 +2,13 @@ import Reactory from '@reactory/reactory-core';
 import clis from './cli';
 import resolvers from './graphql/resolvers';
 import types from './graphql/types';
-import workflows from './workflow';
+import workflows from './workflows';
 import forms from './forms';
 import models from './models';
 import services from './services';
 import routes from './routes';
 import middleware from './middleware';
+import { KB_MACROS, KnowledgeBasePersona } from './ai';
 
 const ReactoryKnowledgeBaseModule: Reactory.Server.IReactoryModule = {
   id: 'reactory-kb',
@@ -37,6 +38,10 @@ const ReactoryKnowledgeBaseModule: Reactory.Server.IReactoryModule = {
   pdfs: [],
   middleware,
   routes,
+  ai: {
+    macros: KB_MACROS,
+    personas: [KnowledgeBasePersona],
+  },
 };
 
 export default ReactoryKnowledgeBaseModule;
