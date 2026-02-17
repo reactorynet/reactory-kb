@@ -4,7 +4,7 @@
  * AI tool for searching knowledge base articles
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 
 export const SearchArticlesMacro: Reactory.AI.MacroToolDefinition = {
   name: 'search_kb_articles',

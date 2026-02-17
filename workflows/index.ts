@@ -4,7 +4,7 @@
  * Export all KB workflow definitions
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import ArticleReviewWorkflow from './ArticleReviewWorkflow';
 import KnowledgeSyncWorkflow from './KnowledgeSyncWorkflow';
 import CollectSystemDocsWorkflow from './CollectSystemDocs/CollectSystemDocsWorkflow';

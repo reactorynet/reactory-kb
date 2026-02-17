@@ -4,7 +4,7 @@
  * AI tool for retrieving contextual knowledge for a query
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 
 export const GetKnowledgeContextMacro: Reactory.AI.MacroToolDefinition = {
   name: 'get_knowledge_context',

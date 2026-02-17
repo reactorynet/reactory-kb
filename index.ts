@@ -1,4 +1,4 @@
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import clis from './cli';
 import resolvers from './graphql/resolvers';
 import types from './graphql/types';

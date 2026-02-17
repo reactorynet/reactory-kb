@@ -4,7 +4,7 @@
  * AI tool for retrieving knowledge base information
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 
 export const GetKnowledgeBaseMacro: Reactory.AI.MacroToolDefinition = {
   name: 'get_knowledge_base',
