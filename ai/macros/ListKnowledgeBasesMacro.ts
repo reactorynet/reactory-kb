@@ -4,7 +4,7 @@
  * AI tool for listing available knowledge bases
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 
 export const ListKnowledgeBasesMacro: Reactory.AI.MacroToolDefinition = {
   name: 'list_knowledge_bases',

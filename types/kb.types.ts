@@ -5,7 +5,7 @@
  * These types extend the existing IReactoryContent model to provide KB-specific functionality.
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { ObjectId } from 'mongoose';
 
 /**

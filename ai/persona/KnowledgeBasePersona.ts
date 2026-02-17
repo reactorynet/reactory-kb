@@ -4,7 +4,7 @@
  * AI assistant specialized in knowledge base management and content creation
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { KB_MACROS } from '../macros';
 
 /**

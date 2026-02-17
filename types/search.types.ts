@@ -5,7 +5,7 @@
  * indexing, and search result processing.
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { KBContentType, KBArticleStatus, IKBContent } from './kb.types';
 
 /**

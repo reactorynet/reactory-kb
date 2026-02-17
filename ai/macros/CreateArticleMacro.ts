@@ -4,7 +4,7 @@
  * AI tool for creating new knowledge base articles
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 
 export const CreateArticleMacro: Reactory.AI.MacroToolDefinition = {
   name: 'create_kb_article',

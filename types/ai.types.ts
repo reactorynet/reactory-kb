@@ -5,7 +5,7 @@
  * macros, and AI-enhanced knowledge management.
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { IKBContent, KBContentType, KBArticleStatus } from './kb.types';
 import { IKBSearchQuery } from './search.types';
 

@@ -6,7 +6,7 @@
  */
 
 import { ObjectId } from 'mongoose';
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { KBArticleStatus, IKBContent } from './kb.types';
 
 /**

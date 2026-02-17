@@ -5,7 +5,7 @@
  * Wraps ReactorySearchService (MeiliSearch) with KB-specific functionality.
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { roles } from '@reactory/server-core/authentication/decorators';
 import { Content } from '@reactory/server-modules/reactory-core/models';
 import logger from '@reactory/server-core/logging';

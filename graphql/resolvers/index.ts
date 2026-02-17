@@ -4,7 +4,7 @@
  * Class-based resolvers with decorators for KB queries and mutations
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 import { roles } from '@reactory/server-core/authentication/decorators';
 import { resolver, property, query, mutation } from '@reactory/server-core/models/graphql/decorators/resolver';
 import { IKnowledgeBaseService } from 'modules/reactory-kb/services/KnowledgeBaseService';

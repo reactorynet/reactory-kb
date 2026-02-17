@@ -4,7 +4,7 @@
  * AI tool for creating new knowledge bases
  */
 
-import Reactory from '@reactory/reactory-core';
+import Reactory from '@reactorynet/reactory-core';
 
 export const CreateKnowledgeBaseMacro: Reactory.AI.MacroToolDefinition = {
   name: 'create_knowledge_base',
