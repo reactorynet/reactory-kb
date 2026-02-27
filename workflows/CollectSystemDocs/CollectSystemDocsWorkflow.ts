@@ -10,9 +10,10 @@ import * as globModule from 'glob';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
+import { promisify } from 'node:util';
 import ReactoryContextProvider from '@reactory/server-core/context/ReactoryContextProvider';
 
-const glob = globModule.glob || globModule;
+const glob = promisify(globModule.glob || globModule);
 import type { IKnowledgeBaseService } from '../../services/KnowledgeBaseService';
 import type { IArticleService } from '../../services/ArticleService';
 import { KBArticleStatus, KBContentType } from '../../types';
@@ -28,13 +29,14 @@ class CollectSystemDocsData {
   public excludePatterns?: string[] = [];
   public includeDrafts?: boolean = false;
   public preserveOrphans?: boolean = false;
+  public username?: string;
 
   // Runtime state
   public kbId?: string;
   public workflowStartTime?: Date;
   public discoveredFiles?: FileMetadata[] = [];
   public fileManifest?: FileWithHash[] = [];
-  public existingArticles?: Map<string, any> = new Map();
+  public existingArticles?: Record<string, any> = {};
   public newFiles?: FileWithHash[] = [];
   public updatedFiles?: FileWithHash[] = [];
   public unchangedFiles?: FileWithHash[] = [];
@@ -126,12 +128,20 @@ abstract class CollectSystemDocsStep extends StepBody {
   protected articleService: IArticleService;
   
   async initializeServices(): Promise<void> {
+    const {
+      username = process.env.KB_SYSTEM_USER || 'kb@reactory.net',
+    } = this.data;
+    // establish a context for the workflow if we don't have one already (should be provided by the workflow engine, but just in case)
     if (!this.context) {
       const ctx: any = await ReactoryContextProvider(null, null);
       // Set up default user for system workflows
-      await ctx.forUser(process.env.KB_SYSTEM_USER || 'system@reactory.io');
+      await ctx.forUser(username);
       await ctx.forPartner(process.env.KB_SYSTEM_PARTNER || 'reactory');
+      // validate thhe context and ensure we have a user and partner correctly set      
       this.context = ctx;
+      if (!this.context.user) {
+        throw new Error(`Failed to initialize workflow context: user not found`);
+      }
     }
     
     this.kbService = this.context.getService<IKnowledgeBaseService>('kb.KnowledgeBaseService@1.0.0');
@@ -177,7 +187,13 @@ class InitializeKBContext extends CollectSystemDocsStep {
       const kbName = process.env.KB_SYSTEM_DOCS_NAME || 'System Documentation';
       const kbSlug = 'system-documentation';
       
-      let kb = await this.kbService.getKnowledgeBaseBySlug(kbSlug);
+      let kb;
+      try { 
+        kb = await this.kbService.getKnowledgeBaseBySlug(kbSlug);
+      }
+      catch (notFoundError) { 
+        logger.warn(`[CollectSystemDocs] KB "${kbName}" not found, will create a new one`, { slug: kbSlug });        
+      }
       
       if (!kb && (process.env.KB_SYSTEM_DOCS_AUTO_CREATE !== 'false')) {
         logger.info('[CollectSystemDocs] Creating System Documentation KB');
@@ -214,16 +230,16 @@ class InitializeKBContext extends CollectSystemDocsStep {
  * Step 2: Discover README Files
  */
 class DiscoverREADMEFiles extends CollectSystemDocsStep {
-  private readonly DEFAULT_SCAN_PATHS = [
-    // Core platform
-    'README.md',    
-    'src/modules/*/README.md',    
-    'src/modules/*/workflow/*/README.md',
-    'src/modules/*/services/README.md',
-    'src/modules/*/models/*/README.md',
-    'src/modules/*/routes/README.md'    
+  /**
+   * Single recursive pattern to discover all README/readme files.
+   * Using a single glob with ** is more reliable than multiple specific paths
+   * and automatically picks up new directories without needing pattern updates.
+   */
+  private readonly DEFAULT_SCAN_PATTERNS = [
+    '**/README.md',
+    '**/readme.md',
   ];
-  
+
   private readonly DEFAULT_EXCLUDE = [
     '**/node_modules/**',
     '**/dist/**',
@@ -237,31 +253,36 @@ class DiscoverREADMEFiles extends CollectSystemDocsStep {
       await this.initializeServices();
       
       const baseDir = process.env.REACTORY_SERVER || process.cwd();
-      const scanPaths = this.data.targetPaths || this.DEFAULT_SCAN_PATHS;
+      const scanPatterns = this.data.targetPaths || this.DEFAULT_SCAN_PATTERNS;
       const exclude = [...this.DEFAULT_EXCLUDE, ...(this.data.excludePatterns || [])];
       
       logger.info('[CollectSystemDocs] Starting file discovery', {
         baseDir,
-        scanPaths: scanPaths.length,
+        scanPatterns,
         excludePatterns: exclude.length,
       });
       
       const discoveredFiles: FileMetadata[] = [];
+      const seenPaths = new Set<string>();
       let totalScanned = 0;
       
-      // Process each scan path
-      for (const scanPath of scanPaths) {
+      for (const pattern of scanPatterns) {
         try {
-          const fullPattern = path.join(baseDir, scanPath);
-          const files = await glob(fullPattern, {
+          const fullPattern = path.join(baseDir, pattern);
+          const files: string[] = await glob(fullPattern, {
             ignore: exclude,
             absolute: true,
             nodir: true,
+            nocase: true,
           });
           
           totalScanned += files.length;
           
           for (const filePath of files) {
+            // Deduplicate in case nocase matches the same file across patterns
+            if (seenPaths.has(filePath)) continue;
+            seenPaths.add(filePath);
+
             try {
               const stats = await fs.stat(filePath);
               const maxSize = parseInt(process.env.KB_DOCS_MAX_FILE_SIZE || '5242880'); // 5MB
@@ -286,20 +307,22 @@ class DiscoverREADMEFiles extends CollectSystemDocsStep {
                 moduleId: metadata.moduleId,
                 category: metadata.category || 'general',
               });
-            } catch (error) {
+            } catch (error: unknown) {
               this.logWarning(
                 'Failed to stat file',
-                { filePath, error: error.message },
+                { filePath, error: error instanceof Error ? error.message : String(error) },
                 'DiscoverREADMEFiles'
               );
             }
           }
         } catch (error) {
           this.logError(
-            `Failed to scan path: ${scanPath}`,
+            `Failed to scan pattern: ${pattern}`,
             error,
             'DiscoverREADMEFiles'
           );
+          ExecutionResult.persist(this.data);
+          throw error;
         }
       }
       
@@ -307,8 +330,8 @@ class DiscoverREADMEFiles extends CollectSystemDocsStep {
       
       logger.info('[CollectSystemDocs] File discovery complete', {
         totalScanned,
-        filesFound: discoveredFiles.length,
-        scanPaths: scanPaths.length,
+        uniqueFilesFound: discoveredFiles.length,
+        scanPatterns,
       });
       
       return ExecutionResult.next();
@@ -434,13 +457,13 @@ class LoadExistingArticles extends CollectSystemDocsStep {
         tags: ['system-documentation'],
       });
       
-      const articleMap = new Map();
+      const articleMap: Record<string, any> = {};
       const orphaned: any[] = [];
       
       for (const article of articles) {
         const sourcePath = (article as any).metadata?.sourcePath;
         if (sourcePath) {
-          articleMap.set(sourcePath, article);
+          articleMap[sourcePath] = article;
         } else {
           orphaned.push(article);
         }
@@ -451,7 +474,7 @@ class LoadExistingArticles extends CollectSystemDocsStep {
       
       logger.info('[CollectSystemDocs] Existing articles loaded', {
         totalArticles: articles.length,
-        mapped: articleMap.size,
+        mapped: Object.keys(articleMap).length,
         orphaned: orphaned.length,
       });
       
@@ -478,7 +501,7 @@ class ClassifyFileChanges extends CollectSystemDocsStep {
       const unchangedFiles: FileWithHash[] = [];
       
       for (const file of this.data.fileManifest || []) {
-        const existing = this.data.existingArticles?.get(file.path);
+        const existing = this.data.existingArticles?.[file.path];
         
         if (!existing) {
           newFiles.push(file);
@@ -732,7 +755,7 @@ class ProcessUpdatedFiles extends ProcessNewFiles {
     const startTime = Date.now();
     
     try {
-      const existing = this.data.existingArticles?.get(file.path);
+      const existing = this.data.existingArticles?.[file.path];
       if (!existing) {
         throw new Error('Existing article not found');
       }
@@ -901,6 +924,8 @@ const CollectSystemDocsWorkflowDefinition: Reactory.Workflow.IWorkflow = {
   category: 'workflow',
   autoStart: false,
   version: '1.0.0',
+  author: 'Reactory',
+  tags: ['knowledge-base', 'documentation', 'automation', 'system'],
   description: 'Collects and processes README documentation files from across the Reactory platform into a knowledge base',
 } as Reactory.Workflow.IWorkflow;
 

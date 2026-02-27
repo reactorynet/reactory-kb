@@ -299,7 +299,7 @@ class ArticleReviewWorkflowImpl implements WorkflowBase<ArticleReviewData> {
 export const ArticleReviewWorkflow: Reactory.Workflow.IWorkflow = {
   id: 'kb.ArticleReviewWorkflow@1.0.0',
   nameSpace: 'kb',
-  name: 'Article Review Workflow',
+  name: 'ArticleReviewWorkflow',
   component: ArticleReviewWorkflowImpl,
   category: 'workflow',
   autoStart: false,

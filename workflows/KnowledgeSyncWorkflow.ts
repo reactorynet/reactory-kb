@@ -424,7 +424,7 @@ class KnowledgeSyncWorkflowImpl implements WorkflowBase<KnowledgeSyncData> {
 export const KnowledgeSyncWorkflow: Reactory.Workflow.IWorkflow = {
   id: 'kb.KnowledgeSyncWorkflow@1.0.0',
   nameSpace: 'kb',
-  name: 'Knowledge Sync Workflow',
+  name: 'KnowledgeSyncWorkflow',
   component: KnowledgeSyncWorkflowImpl,
   category: 'workflow',
   autoStart: false,

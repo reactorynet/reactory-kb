@@ -90,8 +90,9 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   version: string = '1.0.0';
 
   props: Reactory.Service.IReactoryServiceProps;
-  context: Reactory.Server.IReactoryContext;
+  context: Reactory.Server.IReactoryContext;  
   contentService: Reactory.Service.IReactoryContentService;
+  userService: Reactory.Service.IReactoryUserService;
 
   constructor(
     props: Reactory.Service.IReactoryServiceProps,
@@ -101,6 +102,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
     this.context = context;
   }
 
+ 
   /**
    * Generate a unique slug from title
    */
@@ -651,7 +653,26 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
    * Lifecycle methods
    */
   async onStartup(): Promise<void> {
-    logger.info('KnowledgeBaseService started');
+    logger.info('KnowledgeBaseService started 📗');
+    // ensure we have a default user for the knowledge base workflows
+    if (!process.env.KB_SYSTEM_USER) {
+      logger.warn('KB_SYSTEM_USER not set, using default REACTORY system user');
+    } else {
+      logger.info(`KB_SYSTEM_USER set to ${process.env.KB_SYSTEM_USER}`);
+      // check if the user exists and log a warning if not
+      const userExists = await this.userService.findByEmail(process.env.KB_SYSTEM_USER);
+      if (!userExists) {
+        logger.warn(
+          `KB_SYSTEM_USER ${process.env.KB_SYSTEM_USER} does not exist in the system. Please create this user to ensure proper functioning of knowledge base workflows.`
+        );
+      } else {
+        logger.info(`KB_SYSTEM_USER ${process.env.KB_SYSTEM_USER} exists in the system.`);
+      }
+    }
+
+    if (!process.env.KB_SYSTEM_PARTNER) {
+      logger.warn('KB_SYSTEM_PARTNER not set, using default REACTORY partner');
+    } 
   }
 
   getExecutionContext(): Reactory.Server.IReactoryContext {
@@ -665,6 +686,10 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   setContentService(contentService: Reactory.Service.IReactoryContentService): void {
     this.contentService = contentService;
+  }
+
+  setUserService(userService: Reactory.Service.IReactoryUserService): void {
+    this.userService = userService;
   }
 
   /**

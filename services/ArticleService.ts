@@ -19,6 +19,7 @@ import {
   IArticleVersion,
 } from '../types';
 import { KBVersion } from '../models';
+import KnowledgeBaseService from './KnowledgeBaseService';
 
 /**
  * Article Service Interface
@@ -101,7 +102,7 @@ class ArticleService implements IArticleService {
   props: Reactory.Service.IReactoryServiceProps;
   context: Reactory.Server.IReactoryContext;
   fileService: Reactory.Service.IReactoryFileService;
-  kbService: any; // IKnowledgeBaseService
+  kbService: KnowledgeBaseService
 
   constructor(
     props: Reactory.Service.IReactoryServiceProps,
@@ -212,7 +213,7 @@ class ArticleService implements IArticleService {
       logger.debug('Creating article:', input);
 
       // Verify KB exists
-      const kbService = this.props.$services.kb?.KnowledgeBaseService;
+      const { kbService } = this;
       if (!kbService) {
         throw new Error('KnowledgeBaseService not available');
       }
