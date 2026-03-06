@@ -154,6 +154,7 @@ export interface IArticleFilter {
  * Input type for creating a knowledge base
  */
 export interface ICreateKBInput {
+  slug: string; // Unique slug for the knowledge base
   title: string;
   description?: string;
   lng: string; // Default language

@@ -1,5 +1,6 @@
 import Reactory from '@reactorynet/reactory-core';
 import logger from '@reactory/server-core/logging';
+import ReactoryContextProvider from '@reactory/server-core/context/ReactoryContextProvider';
 import {
   WorkflowBase,
   StepBody,
@@ -27,6 +28,26 @@ class ArticleReviewData {
 abstract class ArticleReviewStep extends StepBody {
   public context: Reactory.Server.IReactoryContext;
   public data: ArticleReviewData;
+
+  /**
+   * Initialize the Reactory context and services for this step.
+   * If a context is already provided (e.g. by the workflow engine), it will be reused.
+   */
+  async initializeServices(): Promise<void> {
+    if (!this.context) {
+      const ctx: any = await ReactoryContextProvider(null, null);
+      await ctx.forUser(process.env.KB_SYSTEM_USER || 'kb@reactory.net');
+      await ctx.forPartner(process.env.KB_SYSTEM_PARTNER || 'reactory');
+      this.context = ctx;
+      if (!this.context.user) {
+        throw new Error('Failed to initialize workflow context: user not found');
+      }
+    }
+  }
+
+  protected logError(message: string, error: any, step: string): void {
+    this.context.error(message, { error: error.message, stack: error.stack }, step);
+  }
 }
 
 /**
@@ -35,6 +56,7 @@ abstract class ArticleReviewStep extends StepBody {
 class InitializeReview extends ArticleReviewStep {
   async run(stepContext: StepExecutionContext): Promise<ExecutionResult> {
     try {
+      await this.initializeServices();
       logger.info(`[ArticleReviewWorkflow] Initializing review: ${this.data.articleId}`);
 
       const articleService: any = this.context.getService('kb.ArticleService@1.0.0');

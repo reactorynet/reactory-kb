@@ -7,7 +7,8 @@
 
 import Reactory from '@reactorynet/reactory-core';
 import { roles } from '@reactory/server-core/authentication/decorators';
-import { Content } from '@reactory/server-modules/reactory-core/models';
+import { KBContent } from '../models';
+import type { IKBContentDocument } from '../models';
 import logger from '@reactory/server-core/logging';
 import {
   IKBContent,
@@ -173,10 +174,10 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       logger.debug('Creating knowledge base:', input);
 
       // Generate slug from title if not provided
-      const slug = this.generateSlug(input.title);
+      const slug = input.slug || this.generateSlug(input.title);
 
       // Check if slug already exists
-      const existing = await Content.findOne({ slug, contentType: KBContentType.KNOWLEDGE_BASE });
+      const existing = await KBContent.findOne({ slug, contentType: KBContentType.KNOWLEDGE_BASE });
       if (existing) {
         throw new Error(`Knowledge base with slug "${slug}" already exists`);
       }
@@ -206,7 +207,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       };
 
       // Create the knowledge base
-      const kb = await Content.create(kbContent);
+      const kb = await KBContent.create(kbContent);
 
       logger.info(`Knowledge base created: ${kb._id}`);
       return kb.toObject() as IKBContent;
@@ -224,7 +225,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
     try {
       logger.debug(`Updating knowledge base ${id}:`, input);
 
-      const kb: IKBContent = await Content.findOne({
+      const kb = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -243,11 +244,11 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       if (input.title) kb.title = input.title;
       if (input.description !== undefined) kb.description = input.description;
       if (input.content !== undefined) kb.content = input.content;
-      if (input.lng) (kb as any).lng = input.lng;
-      if (input.tags) (kb as any).tags = input.tags;
-      if (input.categories) (kb as any).categories = input.categories;
-      if (input.status) (kb as any).status = input.status;
-      if (input.visibility) (kb as any).visibility = input.visibility;
+      if (input.lng) kb.lng = input.lng;
+      if (input.tags) kb.tags = input.tags;
+      if (input.categories) kb.categories = input.categories as any;
+      if (input.status) kb.status = input.status;
+      if (input.visibility) kb.visibility = input.visibility;
       if (input.metadata) {
         kb.metadata = { ...kb.metadata, ...input.metadata };
       }
@@ -273,7 +274,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
     try {
       logger.debug(`Deleting knowledge base ${id}`);
 
-      const kb = await Content.findOne({
+      const kb = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -289,13 +290,13 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       }
 
       // Delete all articles in this KB
-      await Content.deleteMany({
+      await KBContent.deleteMany({
         knowledgeBase: id,
         contentType: KBContentType.ARTICLE,
       });
 
       // Delete all categories in this KB
-      await Content.deleteMany({
+      await KBContent.deleteMany({
         knowledgeBase: id,
         contentType: KBContentType.CATEGORY,
       });
@@ -317,7 +318,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   @roles(['USER', 'ANON'])
   async getKnowledgeBase(id: string): Promise<IKBContent> {
     try {
-      const kb = await Content.findOne({
+      const kb = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -327,7 +328,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       }
 
       // Check access for private/shared KBs
-      const visibility = (kb as any).visibility || KBVisibility.PRIVATE;
+      const visibility = kb.visibility || KBVisibility.PRIVATE;
       if (
         visibility !== KBVisibility.PUBLIC &&
         this.context.user &&
@@ -349,7 +350,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   @roles(['USER', 'ANON'])
   async getKnowledgeBaseBySlug(slug: string): Promise<IKBContent> {
     try {
-      const kb = await Content.findOne({
+      const kb = await KBContent.findOne({
         slug,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -359,7 +360,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       }
 
       // Check access for private/shared KBs
-      const visibility = (kb as any).visibility || KBVisibility.PRIVATE;
+      const visibility = kb.visibility || KBVisibility.PRIVATE;
       if (
         visibility !== KBVisibility.PUBLIC &&
         this.context.user &&
@@ -401,7 +402,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       const limit = filter.limit || 50;
       const offset = filter.offset || 0;
 
-      const kbs = await Content.find(query)
+      const kbs = await KBContent.find(query)
         .sort({ [sortBy]: sortDirection })
         .skip(offset)
         .limit(limit)
@@ -455,7 +456,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       const limit = filter.limit || 50;
       const offset = filter.offset || 0;
 
-      const articles = await Content.find(query)
+      const articles = await KBContent.find(query)
         .sort({ [sortBy]: sortDirection })
         .skip(offset)
         .limit(limit)
@@ -477,7 +478,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       // First check if KB exists and user has access
       await this.getKnowledgeBase(kbId);
 
-      const categories = await Content.find({
+      const categories = await KBContent.find({
         knowledgeBase: kbId,
         contentType: KBContentType.CATEGORY,
       })
@@ -502,18 +503,18 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
       // Count articles by status
       const [totalArticles, publishedArticles, draftArticles, archivedArticles] = await Promise.all([
-        Content.countDocuments({ knowledgeBase: kbId, contentType: KBContentType.ARTICLE }),
-        Content.countDocuments({
+        KBContent.countDocuments({ knowledgeBase: kbId, contentType: KBContentType.ARTICLE }),
+        KBContent.countDocuments({
           knowledgeBase: kbId,
           contentType: KBContentType.ARTICLE,
           status: KBArticleStatus.PUBLISHED,
         }),
-        Content.countDocuments({
+        KBContent.countDocuments({
           knowledgeBase: kbId,
           contentType: KBContentType.ARTICLE,
           status: KBArticleStatus.DRAFT,
         }),
-        Content.countDocuments({
+        KBContent.countDocuments({
           knowledgeBase: kbId,
           contentType: KBContentType.ARTICLE,
           status: KBArticleStatus.ARCHIVED,
@@ -521,20 +522,20 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       ]);
 
       // Count categories
-      const totalCategories = await Content.countDocuments({
+      const totalCategories = await KBContent.countDocuments({
         knowledgeBase: kbId,
         contentType: KBContentType.CATEGORY,
       });
 
       // Get unique languages
-      const articles = await Content.find({
+      const articles = await KBContent.find({
         knowledgeBase: kbId,
         contentType: KBContentType.ARTICLE,
       }).select('lng');
-      const availableLanguages = [...new Set(articles.map((a: any) => a.lng).filter(Boolean))];
+      const availableLanguages = [...new Set(articles.map((a) => a.lng).filter(Boolean))];
 
       // Sum view counts
-      const viewCountResult = await Content.aggregate([
+      const viewCountResult = await KBContent.aggregate([
         { $match: { knowledgeBase: kbId, contentType: KBContentType.ARTICLE } },
         { $group: { _id: null, totalViews: { $sum: '$viewCount' } } },
       ]);
@@ -569,7 +570,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   @roles(['USER', 'ANON'])
   async checkAccess(kbId: string, userId: string): Promise<boolean> {
     try {
-      const kb = await Content.findOne({
+      const kb = await KBContent.findOne({
         _id: kbId,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -578,7 +579,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
         return false;
       }
 
-      const visibility = (kb as any).visibility || KBVisibility.PRIVATE;
+      const visibility = kb.visibility || KBVisibility.PRIVATE;
 
       // Public KBs are accessible to everyone
       if (visibility === KBVisibility.PUBLIC) {
@@ -619,7 +620,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
     try {
       logger.debug(`Sharing KB ${kbId} with users:`, userIds);
 
-      const kb = await Content.findOne({
+      const kb = await KBContent.findOne({
         _id: kbId,
         contentType: KBContentType.KNOWLEDGE_BASE,
       });
@@ -634,7 +635,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
       }
 
       // Update visibility to shared
-      (kb as any).visibility = KBVisibility.SHARED;
+      kb.visibility = KBVisibility.SHARED;
 
       // TODO: Create permission records for each user
       // This would be implemented in PermissionService

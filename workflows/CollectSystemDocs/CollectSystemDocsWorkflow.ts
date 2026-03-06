@@ -198,6 +198,7 @@ class InitializeKBContext extends CollectSystemDocsStep {
       if (!kb && (process.env.KB_SYSTEM_DOCS_AUTO_CREATE !== 'false')) {
         logger.info('[CollectSystemDocs] Creating System Documentation KB');
         kb = await this.kbService.createKnowledgeBase({
+          slug: kbSlug,
           title: kbName,
           description: 'Automatically generated documentation from README files across the Reactory platform',
           visibility: 'public' as any,
