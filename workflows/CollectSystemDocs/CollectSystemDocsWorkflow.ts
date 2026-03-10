@@ -5,6 +5,8 @@ import {
   StepBody,
   StepExecutionContext,
   ExecutionResult,
+  WorkflowBuilder,
+  StepBuilder,
 } from 'workflow-es';
 import * as globModule from 'glob';
 import { promises as fs } from 'fs';
@@ -212,7 +214,7 @@ class InitializeKBContext extends CollectSystemDocsStep {
         throw new Error('System Documentation knowledge base not found and auto-create is disabled');
       }
       
-      this.data.kbId = kb.id as string;
+      this.data.kbId = kb._id.toHexString() as string;
       
       logger.info('[CollectSystemDocs] KB Context initialized', {
         kbId: this.data.kbId,
@@ -410,12 +412,20 @@ class CalculateFileHashes extends CollectSystemDocsStep {
       }
       
       this.data.fileManifest = fileManifest;
-      
+
+      const hashFailCount = files.length - fileManifest.length;
       logger.info('[CollectSystemDocs] File hashing complete', {
         totalProcessed: fileManifest.length,
-        failed: files.length - fileManifest.length,
+        failed: hashFailCount,
       });
-      
+
+      if (files.length > 0 && fileManifest.length === 0) {
+        throw new Error(
+          `Workflow failed: all ${files.length} discovered files failed during hash/read step. ` +
+          `Check file permissions and paths.`
+        );
+      }
+
       return ExecutionResult.next();
     } catch (error) {
       this.logError('File hashing failed', error, 'CalculateFileHashes');
@@ -605,7 +615,7 @@ class ProcessNewFiles extends CollectSystemDocsStep {
         title: metadata.title,
         description: metadata.description,
         content: file.content || '',
-        knowledgeBaseId: this.data.kbId!,
+        kbId: this.data.kbId!,
         status: KBArticleStatus.PUBLISHED,
         lng: 'en',
         tags: metadata.tags,
@@ -624,7 +634,7 @@ class ProcessNewFiles extends CollectSystemDocsStep {
       const article = await this.articleService.createArticle(articleData as any);
       
       return {
-        articleId: article.id as string,
+        articleId: article._id.toHexString(),
         filePath: file.path,
         action,
         processingTime: Date.now() - startTime,
@@ -834,13 +844,25 @@ class GenerateWorkflowReport extends CollectSystemDocsStep {
       };
       
       this.data.stats = stats;
-      
+
+      // Validate overall outcome: if every discovered file failed, the workflow itself has failed
+      const filesFound = stats.discovery.filesFound;
+      const failedFiles = stats.processing.failedFiles;
+      if (filesFound > 0 && failedFiles >= filesFound && stats.processing.totalProcessed === 0) {
+        const errorMsg =
+          `Workflow failed: all ${filesFound} file(s) failed processing ` +
+          `(${failedFiles} failures, 0 successes). ` +
+          `Check the errors array for details.`;
+        logger.error(`[CollectSystemDocs] ${errorMsg}`, { stats, errors: this.data.errors });
+        throw new Error(errorMsg);
+      }
+
       logger.info('[CollectSystemDocs] Workflow complete', {
         stats,
         errors: this.data.errors?.length,
         warnings: this.data.warnings?.length,
       });
-      
+
       return ExecutionResult.next();
     } catch (error) {
       this.logError('Report generation failed', error, 'GenerateWorkflowReport');
@@ -856,58 +878,76 @@ class CollectSystemDocsWorkflow implements WorkflowBase<CollectSystemDocsData> {
   id: string = 'kb.CollectSystemDocsWorkflow@1.0.0';
   version: number = 1;
   
-  public build(builder: any) {
+  public build(builder: WorkflowBuilder<CollectSystemDocsData>): void {
     builder
-      .startWith(InitializeKBContext)
+      .startWith(
+        InitializeKBContext,
+        (step: StepBuilder<any, CollectSystemDocsData>) => {
+          step.name('Initialize KB Context');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(DiscoverREADMEFiles)
+      .then(DiscoverREADMEFiles, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Discover README Files');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(CalculateFileHashes)
+      .then(CalculateFileHashes, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Calculate File Hashes');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(LoadExistingArticles)
+      .then(LoadExistingArticles, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Load Existing Articles');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(ClassifyFileChanges)
+      .then(ClassifyFileChanges, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Classify File Changes');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(ProcessNewFiles)
+      .then(ProcessNewFiles, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Process New Files');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(ProcessUpdatedFiles)
+      .then(ProcessUpdatedFiles, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Process Updated Files');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         })
         .output((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           data = step.data;
         })
-      .then(GenerateWorkflowReport)
+      .then(GenerateWorkflowReport, (step: StepBuilder<any, CollectSystemDocsData>) => {
+        step.name('Generate Workflow Report');
+        })
         .input((step: CollectSystemDocsStep, data: CollectSystemDocsData) => {
           step.data = data;
         });

@@ -168,7 +168,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   /**
    * Create a new knowledge base
    */
-  @roles(['USER', 'ADMIN'])
+  @roles(['USER', 'ADMIN', 'SYSTEM'])
   async createKnowledgeBase(input: ICreateKBInput): Promise<IKBContent> {
     try {
       logger.debug('Creating knowledge base:', input);
@@ -220,7 +220,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   /**
    * Update an existing knowledge base
    */
-  @roles(['USER', 'ADMIN'])
+  @roles(['USER', 'ADMIN', 'SYSTEM'])
   async updateKnowledgeBase(id: string, input: IUpdateKBInput): Promise<IKBContent> {
     try {
       logger.debug(`Updating knowledge base ${id}:`, input);
@@ -269,7 +269,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   /**
    * Delete a knowledge base
    */
-  @roles(['USER', 'ADMIN'])
+  @roles(['USER', 'ADMIN', 'SYSTEM'])
   async deleteKnowledgeBase(id: string): Promise<boolean> {
     try {
       logger.debug(`Deleting knowledge base ${id}`);
@@ -314,8 +314,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   /**
    * Get a knowledge base by ID
-   */
-  @roles(['USER', 'ANON'])
+   */  
   async getKnowledgeBase(id: string): Promise<IKBContent> {
     try {
       const kb = await KBContent.findOne({
@@ -346,8 +345,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   /**
    * Get a knowledge base by slug
-   */
-  @roles(['USER', 'ANON'])
+   */  
   async getKnowledgeBaseBySlug(slug: string): Promise<IKBContent> {
     try {
       const kb = await KBContent.findOne({
@@ -378,8 +376,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   /**
    * List knowledge bases with filtering
-   */
-  @roles(['USER', 'ANON'])
+   */  
   async listKnowledgeBases(filter: IKBFilter = {}): Promise<IKBContent[]> {
     try {
       const query = this.buildQuery(filter);
@@ -417,8 +414,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   /**
    * Get all articles in a knowledge base
-   */
-  @roles(['USER', 'ANON'])
+   */  
   async getKBArticles(kbId: string, filter: IKBFilter = {}): Promise<IKBContent[]> {
     try {
       // First check if KB exists and user has access
@@ -471,8 +467,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   /**
    * Get all categories in a knowledge base
-   */
-  @roles(['USER', 'ANON'])
+   */  
   async getKBCategories(kbId: string): Promise<IKBContent[]> {
     try {
       // First check if KB exists and user has access
@@ -495,7 +490,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
   /**
    * Get knowledge base statistics
    */
-  @roles(['USER'])
+  @roles(['USER', 'SYSTEM'])
   async getKBStatistics(kbId: string): Promise<IKBStats> {
     try {
       // Check if KB exists and user has access
@@ -566,8 +561,7 @@ class KnowledgeBaseService implements IKnowledgeBaseService {
 
   /**
    * Check if user has access to knowledge base
-   */
-  @roles(['USER', 'ANON'])
+   */  
   async checkAccess(kbId: string, userId: string): Promise<boolean> {
     try {
       const kb = await KBContent.findOne({

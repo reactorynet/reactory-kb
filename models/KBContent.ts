@@ -60,7 +60,7 @@ const KBContentSchema = new mongoose.Schema<IKBContentDocument>({
 
   // ── Knowledge base relationships ──────────────────────────────────────────
   knowledgeBase: { type: ObjectId, ref: 'Content', index: true },
-  categories: [{ type: ObjectId, ref: 'Content' }],
+  categories: [{ type: String, trim: true, lowercase: true }],
   tags: [{ type: String, trim: true, lowercase: true }],
 
   // ── KB metadata ───────────────────────────────────────────────────────────
@@ -85,8 +85,8 @@ const KBContentSchema = new mongoose.Schema<IKBContentDocument>({
   bookmarks: [{ type: ObjectId, ref: 'KBBookmark' }],
 
   // ── Hierarchical / book-style content ────────────────────────────────────
-  parentContent: { type: ObjectId, ref: 'Content' },
-  childContent: [{ type: ObjectId, ref: 'Content' }],
+  parent: { type: ObjectId, ref: 'Content' },
+  children: [{ type: ObjectId, ref: 'Content' }],
   order: { type: Number, default: 0 },
 });
 

@@ -18,7 +18,7 @@ import {
   KBArticleStatus,
   IArticleVersion,
 } from '../types';
-import { KBVersion } from '../models';
+import { KBContent, KBVersion } from '../models';
 import KnowledgeBaseService from './KnowledgeBaseService';
 
 /**
@@ -207,11 +207,10 @@ class ArticleService implements IArticleService {
   /**
    * Create a new article
    */
-  @roles(['USER', 'ADMIN'])
+  @roles(['USER', 'ADMIN', 'SYSTEM'])
   async createArticle(input: ICreateArticleInput): Promise<IKBContent> {
     try {
-      logger.debug('Creating article:', input);
-
+      logger.debug('Creating article:', input);            
       // Verify KB exists
       const { kbService } = this;
       if (!kbService) {
@@ -224,9 +223,9 @@ class ArticleService implements IArticleService {
       const slug = this.generateSlug(input.title, input.kbId);
 
       // Check if slug already exists in this KB
-      const existing = await Content.findOne({
+      const existing = await KBContent.findOne({
         slug,
-        knowledgeBase: input.kbId,
+        parent: input.kbId,
         contentType: KBContentType.ARTICLE,
       });
 
@@ -241,7 +240,7 @@ class ArticleService implements IArticleService {
         description: input.description,
         content: input.content,
         contentType: KBContentType.ARTICLE,
-        knowledgeBase: input.kbId,
+        parent: input.kbId,
         lng: input.lng || 'en',
         tags: input.tags || [],
         categories: input.categories || [],
@@ -262,7 +261,7 @@ class ArticleService implements IArticleService {
       };
 
       // Create the article
-      const article = await Content.create(articleContent);
+      const article = await KBContent.create(articleContent);
 
       // Create initial version
       await this.createVersion(
@@ -288,7 +287,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Updating article ${id}:`, input);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.ARTICLE,
       });
@@ -359,7 +358,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Deleting article ${id}`);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.ARTICLE,
       });
@@ -398,7 +397,7 @@ class ArticleService implements IArticleService {
   @roles(['USER', 'ANON'])
   async getArticle(id: string): Promise<IKBContent> {
     try {
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.ARTICLE,
       });
@@ -445,7 +444,7 @@ class ArticleService implements IArticleService {
         query.knowledgeBase = kbId;
       }
 
-      const article = await Content.findOne(query);
+      const article = await KBContent.findOne(query);
 
       if (!article) {
         throw new Error(`Article with slug "${slug}" not found`);
@@ -481,7 +480,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Publishing article ${id}`);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.ARTICLE,
       });
@@ -521,7 +520,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Archiving article ${id}`);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.ARTICLE,
       });
@@ -581,7 +580,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Reverting article ${id} to version ${versionNumber}`);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: id,
         contentType: KBContentType.ARTICLE,
       });
@@ -636,7 +635,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Adding attachment ${fileId} to article ${articleId}`);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: articleId,
         contentType: KBContentType.ARTICLE,
       });
@@ -679,7 +678,7 @@ class ArticleService implements IArticleService {
     try {
       logger.debug(`Removing attachment ${attachmentId} from article ${articleId}`);
 
-      const article = await Content.findOne({
+      const article = await KBContent.findOne({
         _id: articleId,
         contentType: KBContentType.ARTICLE,
       });
@@ -731,7 +730,7 @@ class ArticleService implements IArticleService {
       const limit = filter.limit || 50;
       const offset = filter.offset || 0;
 
-      const articles = await Content.find(query)
+      const articles = await KBContent.find(query)
         .sort({ [sortBy]: sortDirection })
         .skip(offset)
         .limit(limit)
@@ -750,7 +749,7 @@ class ArticleService implements IArticleService {
   @roles(['USER', 'ANON'])
   async updateViewCount(id: string): Promise<void> {
     try {
-      await Content.findByIdAndUpdate(id, {
+      await KBContent.findByIdAndUpdate(id, {
         $inc: { viewCount: 1 },
         $set: { lastViewed: new Date() },
       });

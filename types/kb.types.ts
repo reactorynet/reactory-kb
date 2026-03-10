@@ -71,8 +71,8 @@ export interface IKBContent extends Reactory.Models.IReactoryContent {
   bookmarks?: ObjectId[] | string[]; // User bookmarks
   
   // Book/hierarchical content support
-  parentContent?: ObjectId | string; // Parent content (for nested structures)
-  childContent?: ObjectId[] | string[]; // Child content items
+  parent?: ObjectId | string; // Parent content (for nested structures)
+  children?: ObjectId[] | string[]; // Child content items
   order?: number; // Order within parent
 }
 
