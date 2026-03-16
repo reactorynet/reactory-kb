@@ -83,6 +83,7 @@ export const KnowledgeBasePersona: IAIPersona = {
   version: '1.0.0',
   description: 'AI assistant specialized in knowledge base management and content creation',  
   modelId: process.env.GOOGLE_AI_STUDIO_MODEL_ID || 'gemini-2.5-pro',
+  persona: 'knowledge_base_assistant',
   providerId: 'google',
   tools: [...KB_MACROS],
   macros: [...KB_MACROS],
