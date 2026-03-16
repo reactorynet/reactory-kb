@@ -72,6 +72,7 @@ export const CreateArticleMacro: Reactory.AI.MacroToolDefinition = {
           success: false,
           error: `Content validation failed: ${validation.issues.join(', ')}`,
           suggestions: validation.suggestions,
+          instructions: `## Create Article \u2014 Validation Failed\n\n${validation.issues.join(', ')}\n\n### Suggestions:\n${(validation.suggestions || []).map((s: string) => `- ${s}`).join('\n')}\n\n### Recovery Options:\n- Review and fix the content issues\n- Retry with updated content`
         };
       }
     }
@@ -96,6 +97,7 @@ export const CreateArticleMacro: Reactory.AI.MacroToolDefinition = {
         createdAt: article.createdAt,
       },
       message: `Article "${params.title}" created successfully`,
+      instructions: `## Article Created\n\n**${params.title}** (ID: ${article.id}, slug: ${article.slug})\nStatus: ${article.status}\n\n### Suggested Next Steps:\n- Use \`search_kb_articles\` with query to verify the article appears in search\n- Use \`get_knowledge_base\` to see the parent KB\n- Create more articles with \`create_kb_article\``
     };
   },
 };

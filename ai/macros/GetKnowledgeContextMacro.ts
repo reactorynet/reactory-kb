@@ -62,6 +62,7 @@ export const GetKnowledgeContextMacro: Reactory.AI.MacroToolDefinition = {
         availableLanguages: knowledgeContext.localizedVersions.map(lv => lv.lng),
       },
       message: `Retrieved knowledge context for "${params.query}" (confidence: ${(knowledgeContext.confidence * 100).toFixed(0)}%)`,
+      instructions: `## Knowledge Context: "${params.query}"\n\nConfidence: **${(knowledgeContext.confidence * 100).toFixed(0)}%** | ${knowledgeContext.content.length} article(s) found\n\n### Top Articles:\n${knowledgeContext.content.slice(0, 5).map(a => `- **${a.title}** (score: ${a.relevanceScore?.toFixed(2) || 'N/A'})`).join('\n')}\n\n${knowledgeContext.knowledgeGaps?.length ? `### Knowledge Gaps:\n${knowledgeContext.knowledgeGaps.map((g: string) => `- ${g}`).join('\n')}` : ''}\n\n### Suggested Next Steps:\n- Use the article data to form a comprehensive answer\n- Use \`search_kb_articles\` for more specific searches\n- Use \`create_kb_article\` to fill any knowledge gaps`
     };
   },
 };

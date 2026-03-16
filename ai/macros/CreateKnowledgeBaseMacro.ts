@@ -71,6 +71,7 @@ export const CreateKnowledgeBaseMacro: Reactory.AI.MacroToolDefinition = {
         visibility: kb.visibility,
       },
       message: `Knowledge base "${params.title}" created successfully`,
+      instructions: `## Knowledge Base Created\n\n**${params.title}** (ID: ${kb.id}, visibility: ${kb.visibility})\n\n### Suggested Next Steps:\n- Use \`create_kb_article\` with kbId="${kb.id}" to add articles\n- Use \`list_knowledge_bases\` to see all knowledge bases`
     };
   },
 };

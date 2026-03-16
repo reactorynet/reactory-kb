@@ -60,6 +60,7 @@ export const GetKnowledgeBaseMacro: Reactory.AI.MacroToolDefinition = {
         updatedAt: kb.updatedAt,
       },
       message: `Retrieved knowledge base "${kb.title}"`,
+      instructions: `## Knowledge Base: ${kb.title}\n\n- **ID**: ${kb.id}\n- **Slug**: ${kb.slug}\n- **Language**: ${kb.lng}\n- **Visibility**: ${kb.visibility}\n- **Tags**: ${(kb.tags || []).join(', ') || 'none'}\n\n### Suggested Next Steps:\n- Use \`search_kb_articles\` with kbId="${kb.id}" to find articles\n- Use \`create_kb_article\` with kbId="${kb.id}" to add content\n- Use \`get_knowledge_context\` with kbId="${kb.id}" for AI-powered context`
     };
   },
 };

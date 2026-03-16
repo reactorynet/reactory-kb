@@ -61,6 +61,7 @@ export const ListKnowledgeBasesMacro: Reactory.AI.MacroToolDefinition = {
         createdAt: kb.createdAt,
       })),
       message: `Found ${kbs.length} knowledge bases`,
+      instructions: `## Knowledge Bases (${kbs.length})\n\n${kbs.length === 0 ? 'No knowledge bases found.' : kbs.map(kb => `- **${kb.title}** (${kb.id}) \u2014 ${kb.visibility}`).join('\n')}\n\n### Suggested Next Steps:\n${kbs.length === 0 ? '- Use \`create_knowledge_base\` to create one' : '- Use \`get_knowledge_base\` with an ID to see details\n- Use \`search_kb_articles\` with kbId to search within a KB'}`
     };
   },
 };

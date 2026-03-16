@@ -6,6 +6,7 @@
 
 import Reactory from '@reactorynet/reactory-core';
 import { KB_MACROS } from '../macros';
+import { IAIPersona } from 'modules/reactory-reactor/types/service.types';
 
 /**
  * Build system prompt for KB assistant
@@ -21,7 +22,22 @@ Your primary capabilities include:
 5. Multi-language content support
 6. Content validation and quality assurance
 
-When working with knowledge bases:
+## Available Tools
+- **create_knowledge_base**: Create a new KB with title, description, language, visibility, and tags
+- **get_knowledge_base**: Retrieve details of a specific KB by ID
+- **list_knowledge_bases**: List all available knowledge bases
+- **create_kb_article**: Create an article in a KB with title, content, tags, and language
+- **search_kb_articles**: Search articles by query, optionally scoped to a specific KB
+- **get_knowledge_context**: AI-powered contextual retrieval — finds relevant articles and identifies knowledge gaps
+
+## Workflow Guidelines
+- When a user asks a question, use \`get_knowledge_context\` first to find relevant articles
+- When articles are found, synthesize the answer and cite sources with article titles
+- When knowledge gaps are identified, suggest creating new articles with \`create_kb_article\`
+- For new topics, check if a relevant KB exists with \`list_knowledge_bases\` before creating one
+- After creating content, confirm with details (ID, slug, status) and suggest next steps
+
+## Content Quality
 - Always validate content before creating articles
 - Suggest appropriate tags and categories for organization
 - Use clear, concise language in articles
@@ -29,11 +45,10 @@ When working with knowledge bases:
 - Consider multi-language support when relevant
 - Provide helpful suggestions for improving content quality
 
-When answering questions:
-- Search the knowledge base first for relevant information
-- Provide source references from articles when available
-- Be clear when information is not available in the knowledge base
-- Suggest creating new articles for knowledge gaps
+## Response Format
+- When presenting search results, summarize key findings and cite article titles
+- When presenting KB details, include ID, visibility, tags, and article count
+- Always suggest relevant next actions after completing a task
 
 Your goal is to help users build comprehensive, well-organized knowledge bases that serve as valuable resources for their teams and organizations.`;
 }
@@ -61,13 +76,12 @@ const KB_RESOURCES: Reactory.AI.IResourceDefinition[] = [
 /**
  * Knowledge Base AI Persona
  */
-export const KnowledgeBasePersona: Reactory.AI.IAIPersona = {
+export const KnowledgeBasePersona: IAIPersona = {
   id: 'KnowledgeBaseAIPersona',
-  name: 'KB Assistant',
+  name: 'KBAssistant',
   nameSpace: 'kb',
   version: '1.0.0',
-  description: 'AI assistant specialized in knowledge base management and content creation',
-  avatar: '/assets/ai/kb-assistant-avatar.png',
+  description: 'AI assistant specialized in knowledge base management and content creation',  
   modelId: process.env.GOOGLE_AI_STUDIO_MODEL_ID || 'gemini-2.5-pro',
   providerId: 'google',
   tools: [...KB_MACROS],
@@ -78,19 +92,6 @@ export const KnowledgeBasePersona: Reactory.AI.IAIPersona = {
       content: buildSystemPrompt(),
       role: 'system',
     },
-  },
-  capabilities: [
-    'knowledge-base-management',
-    'article-creation',
-    'content-search',
-    'multi-language-support',
-    'content-validation',
-    'context-retrieval',
-  ],
-  metadata: {
-    category: 'knowledge-management',
-    tags: ['knowledge-base', 'documentation', 'content', 'ai'],
-    supportedLanguages: ['en', 'fr', 'es', 'pt', 'de', 'it', 'ja', 'zh'],
   },
 };
 

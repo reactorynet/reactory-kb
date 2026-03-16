@@ -75,6 +75,7 @@ export const SearchArticlesMacro: Reactory.AI.MacroToolDefinition = {
         })),
       },
       message: `Found ${results.total} articles matching "${params.query}"`,
+      instructions: `## Search Results: "${params.query}"\n\n**${results.total}** article(s) found.\n\n${results.results.slice(0, 5).map((a: any) => `- **${a.title}** (${a.id}, score: ${a._score?.toFixed(2) || 'N/A'})`).join('\n')}\n\n### Suggested Next Steps:\n- Use article IDs with \`get_knowledge_context\` for deeper analysis\n- Refine search with tags or kbId filters\n- Use \`create_kb_article\` if the topic is not covered`
     };
   },
 };
