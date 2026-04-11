@@ -1,5 +1,6 @@
 import Reactory from '@reactorynet/reactory-core';
 import logger from '@reactory/server-core/logging';
+import { InstanceResourceManager } from '@reactory/server-modules/reactory-core/workflow/InstanceResourceManager';
 import {
   WorkflowBase,
   StepBody,
@@ -34,6 +35,7 @@ class CollectSystemDocsData {
   public username?: string;
 
   // Runtime state
+  public instanceId?: string;
   public kbId?: string;
   public workflowStartTime?: Date;
   public discoveredFiles?: FileMetadata[] = [];
@@ -51,8 +53,9 @@ class CollectSystemDocsData {
   
   // Statistics
   public stats?: WorkflowStats;
-  public errors?: ErrorDetail[] = [];
-  public warnings?: WarningDetail[] = [];
+  public errorCount: number = 0;
+  public warningCount: number = 0;
+  public infoCount: number = 0;
 }
 
 interface FileMetadata {
@@ -80,18 +83,6 @@ interface FailedFile {
   filePath: string;
   error: string;
   step: string;
-}
-
-interface ErrorDetail {
-  step: string;
-  error: string;
-  context: any;
-}
-
-interface WarningDetail {
-  step: string;
-  message: string;
-  context: any;
 }
 
 interface WorkflowStats {
@@ -128,6 +119,12 @@ abstract class CollectSystemDocsStep extends StepBody {
   
   protected kbService: IKnowledgeBaseService;
   protected articleService: IArticleService;
+
+  /** Returns the InstanceResourceManager for this workflow run, if initialised. */
+  protected get resourceManager(): InstanceResourceManager | null {
+    if (!this.data?.instanceId) return null;
+    return InstanceResourceManager.forInstance(this.data.instanceId);
+  }
   
   async initializeServices(): Promise<void> {
     const {
@@ -135,7 +132,7 @@ abstract class CollectSystemDocsStep extends StepBody {
     } = this.data;
     // establish a context for the workflow if we don't have one already (should be provided by the workflow engine, but just in case)
     if (!this.context) {
-      const ctx: any = await ReactoryContextProvider(null, null);
+      const ctx: any = await ReactoryContextProvider(null);
       // Set up default user for system workflows
       await ctx.forUser(username);
       await ctx.forPartner(process.env.KB_SYSTEM_PARTNER || 'reactory');
@@ -151,21 +148,22 @@ abstract class CollectSystemDocsStep extends StepBody {
   }
   
   protected logError(message: string, error: any, step: string): void {
-    this.context.error(message, { error: error.message, stack: error.stack }, step);
-    this.data.errors?.push({
-      step,
-      error: error.message,
-      context: { message, stack: error.stack }
-    });
+    const meta = { error: error.message, stack: error.stack };
+    this.context.error(message, meta, step);
+    this.resourceManager?.error(message, { step, ...meta });
+    this.data.errorCount = (this.data.errorCount ?? 0) + 1;
   }
   
   protected logWarning(message: string, context: any, step: string): void {
     this.context.warn(message, context, step);
-    this.data.warnings?.push({
-      step,
-      message,
-      context
-    });
+    this.resourceManager?.warn(message, { step, ...context });
+    this.data.warningCount = (this.data.warningCount ?? 0) + 1;
+  }
+
+  protected logInfo(message: string, meta?: Record<string, unknown>): void {
+    logger.info(`[CollectSystemDocs] ${message}`, meta);
+    this.resourceManager?.info(message, meta);
+    this.data.infoCount = (this.data.infoCount ?? 0) + 1;
   }
 }
 
@@ -178,12 +176,26 @@ class InitializeKBContext extends CollectSystemDocsStep {
       await this.initializeServices();
       
       this.data.workflowStartTime = new Date();
-      this.data.errors = [];
-      this.data.warnings = [];
+      this.data.errorCount = 0;
+      this.data.warningCount = 0;
+      this.data.infoCount = 0;
       this.data.successfulArticles = [];
       this.data.failedFiles = [];
-      
+
+      // Capture the workflow instance ID and initialise the resource manager
+      // so all subsequent steps can write to a dedicated per-instance log file.
+      const instanceId = stepContext.workflow.id;
+      this.data.instanceId = instanceId;
+      const rm = new InstanceResourceManager(
+        'kb',
+        'CollectSystemDocsWorkflow',
+        '1.0.0',
+        instanceId,
+      );
+      InstanceResourceManager.register(instanceId, rm);
+
       logger.info('[CollectSystemDocs] Initializing workflow context');
+      rm.info('Workflow instance started', { instanceId });
       
       // Find or create "System Documentation" KB
       const kbName = process.env.KB_SYSTEM_DOCS_NAME || 'System Documentation';
@@ -194,11 +206,13 @@ class InitializeKBContext extends CollectSystemDocsStep {
         kb = await this.kbService.getKnowledgeBaseBySlug(kbSlug);
       }
       catch (notFoundError) { 
-        logger.warn(`[CollectSystemDocs] KB "${kbName}" not found, will create a new one`, { slug: kbSlug });        
+        logger.warn(`[CollectSystemDocs] KB "${kbName}" not found, will create a new one`, { slug: kbSlug });
+        this.resourceManager?.warn(`KB "${kbName}" not found, will create a new one`, { slug: kbSlug });
+        this.data.warningCount = (this.data.warningCount ?? 0) + 1;        
       }
       
       if (!kb && (process.env.KB_SYSTEM_DOCS_AUTO_CREATE !== 'false')) {
-        logger.info('[CollectSystemDocs] Creating System Documentation KB');
+        this.logInfo('Creating System Documentation KB');
         kb = await this.kbService.createKnowledgeBase({
           slug: kbSlug,
           title: kbName,
@@ -215,11 +229,9 @@ class InitializeKBContext extends CollectSystemDocsStep {
       }
       
       this.data.kbId = kb._id.toHexString() as string;
-      
-      logger.info('[CollectSystemDocs] KB Context initialized', {
-        kbId: this.data.kbId,
-        kbName: kb.title,
-      });
+
+      const initMeta = { kbId: this.data.kbId, kbName: kb.title };
+      this.logInfo('KB Context initialized', initMeta);
       
       return ExecutionResult.next();
     } catch (error) {
@@ -258,12 +270,9 @@ class DiscoverREADMEFiles extends CollectSystemDocsStep {
       const baseDir = process.env.REACTORY_SERVER || process.cwd();
       const scanPatterns = this.data.targetPaths || this.DEFAULT_SCAN_PATTERNS;
       const exclude = [...this.DEFAULT_EXCLUDE, ...(this.data.excludePatterns || [])];
-      
-      logger.info('[CollectSystemDocs] Starting file discovery', {
-        baseDir,
-        scanPatterns,
-        excludePatterns: exclude.length,
-      });
+
+      const discoveryStartMeta = { baseDir, scanPatterns, excludePatterns: exclude.length };
+      this.logInfo('Starting file discovery', discoveryStartMeta);
       
       const discoveredFiles: FileMetadata[] = [];
       const seenPaths = new Set<string>();
@@ -330,12 +339,9 @@ class DiscoverREADMEFiles extends CollectSystemDocsStep {
       }
       
       this.data.discoveredFiles = discoveredFiles;
-      
-      logger.info('[CollectSystemDocs] File discovery complete', {
-        totalScanned,
-        uniqueFilesFound: discoveredFiles.length,
-        scanPatterns,
-      });
+
+      const discoveryDoneMeta = { totalScanned, uniqueFilesFound: discoveredFiles.length, scanPatterns };
+      this.logInfo('File discovery complete', discoveryDoneMeta);
       
       return ExecutionResult.next();
     } catch (error) {
@@ -381,13 +387,12 @@ class CalculateFileHashes extends CollectSystemDocsStep {
   
   async run(stepContext: StepExecutionContext): Promise<ExecutionResult> {
     try {
+
       await this.initializeServices();
       
       const files = this.data.discoveredFiles || [];
-      logger.info('[CollectSystemDocs] Calculating file hashes', {
-        totalFiles: files.length,
-        parallelLimit: this.PARALLEL_LIMIT,
-      });
+      const hashStartMeta = { totalFiles: files.length, parallelLimit: this.PARALLEL_LIMIT };
+      this.logInfo('Calculating file hashes', hashStartMeta);
       
       const fileManifest: FileWithHash[] = [];
       
@@ -414,10 +419,8 @@ class CalculateFileHashes extends CollectSystemDocsStep {
       this.data.fileManifest = fileManifest;
 
       const hashFailCount = files.length - fileManifest.length;
-      logger.info('[CollectSystemDocs] File hashing complete', {
-        totalProcessed: fileManifest.length,
-        failed: hashFailCount,
-      });
+      const hashDoneMeta = { totalProcessed: fileManifest.length, failed: hashFailCount };
+      this.logInfo('File hashing complete', hashDoneMeta);
 
       if (files.length > 0 && fileManifest.length === 0) {
         throw new Error(
@@ -444,10 +447,7 @@ class CalculateFileHashes extends CollectSystemDocsStep {
         content,
       };
     } catch (error) {
-      logger.warn('[CollectSystemDocs] Failed to read file', {
-        path: file.path,
-        error: error.message,
-      });
+      logger.warn('[CollectSystemDocs] Failed to read file', { path: file.path, error: error.message });
       return null;
     }
   }
@@ -461,11 +461,18 @@ class LoadExistingArticles extends CollectSystemDocsStep {
     try {
       await this.initializeServices();
       
-      logger.info('[CollectSystemDocs] Loading existing articles');
+      this.logInfo('Loading existing articles');
       
       const articles = await this.articleService.listArticles({
         knowledgeBaseId: this.data.kbId,
         tags: ['system-documentation'],
+        limit: 10000,
+        projection: {
+          'metadata.sourcePath': 1,
+          'metadata.sourceHash': 1,
+          title: 1,
+          slug: 1,
+        },
       });
       
       const articleMap: Record<string, any> = {};
@@ -475,7 +482,7 @@ class LoadExistingArticles extends CollectSystemDocsStep {
         const sourcePath = (article as any).metadata?.sourcePath;
         if (sourcePath) {
           articleMap[sourcePath] = article;
-        } else {
+        } else {          
           orphaned.push(article);
         }
       }
@@ -483,11 +490,8 @@ class LoadExistingArticles extends CollectSystemDocsStep {
       this.data.existingArticles = articleMap;
       this.data.orphanedArticles = orphaned;
       
-      logger.info('[CollectSystemDocs] Existing articles loaded', {
-        totalArticles: articles.length,
-        mapped: Object.keys(articleMap).length,
-        orphaned: orphaned.length,
-      });
+      const loadedMeta = { totalArticles: articles.length, mapped: Object.keys(articleMap).length, orphaned: orphaned.length };
+      this.logInfo('Existing articles loaded', loadedMeta);
       
       return ExecutionResult.next();
     } catch (error) {
@@ -505,7 +509,7 @@ class ClassifyFileChanges extends CollectSystemDocsStep {
     try {
       await this.initializeServices();
       
-      logger.info('[CollectSystemDocs] Classifying file changes');
+      this.logInfo('Classifying file changes');
       
       const newFiles: FileWithHash[] = [];
       const updatedFiles: FileWithHash[] = [];
@@ -527,11 +531,8 @@ class ClassifyFileChanges extends CollectSystemDocsStep {
       this.data.updatedFiles = updatedFiles;
       this.data.unchangedFiles = unchangedFiles;
       
-      logger.info('[CollectSystemDocs] File classification complete', {
-        new: newFiles.length,
-        updated: updatedFiles.length,
-        unchanged: unchangedFiles.length,
-      });
+      const classifyMeta = { new: newFiles.length, updated: updatedFiles.length, unchanged: unchangedFiles.length };
+      this.logInfo('File classification complete', classifyMeta);
       
       return ExecutionResult.next();
     } catch (error) {
@@ -554,24 +555,20 @@ class ProcessNewFiles extends CollectSystemDocsStep {
       const files = this.data.newFiles || [];
       
       if (files.length === 0) {
-        logger.info('[CollectSystemDocs] No new files to process');
+        this.logInfo('No new files to process');
         return ExecutionResult.next();
       }
-      
-      logger.info('[CollectSystemDocs] Processing new files', {
-        totalFiles: files.length,
-        parallelLimit: this.PARALLEL_LIMIT,
-      });
+
+      const newFilesMeta = { totalFiles: files.length, parallelLimit: this.PARALLEL_LIMIT };
+      this.logInfo('Processing new files', newFilesMeta);
       
       for (let i = 0; i < files.length; i += this.PARALLEL_LIMIT) {
         const batch = files.slice(i, i + this.PARALLEL_LIMIT);
         await this.processBatch(batch, 'created');
       }
       
-      logger.info('[CollectSystemDocs] New files processing complete', {
-        successful: this.data.successfulArticles?.filter(a => a.action === 'created').length,
-        failed: this.data.failedFiles?.length,
-      });
+      const newDoneMeta = { successful: this.data.successfulArticles?.filter(a => a.action === 'created').length, failed: this.data.failedFiles?.length };
+      this.logInfo('New files processing complete', newDoneMeta);
       
       return ExecutionResult.next();
     } catch (error) {
@@ -582,10 +579,8 @@ class ProcessNewFiles extends CollectSystemDocsStep {
   
   protected async processBatch(files: FileWithHash[], action: 'created' | 'updated'): Promise<void> {
     if (this.data.dryRun) {
-      logger.info('[CollectSystemDocs] DRY RUN - Would process files', {
-        files: files.map(f => f.relativePath),
-        action,
-      });
+      const dryRunMeta = { files: files.map(f => f.relativePath), action };
+      this.logInfo('DRY RUN - Would process files', dryRunMeta);
       return;
     }
     
@@ -609,6 +604,16 @@ class ProcessNewFiles extends CollectSystemDocsStep {
   protected async processFile(file: FileWithHash, action: 'created' | 'updated'): Promise<ArticleResult> {
     const startTime = Date.now();
     
+    const articleMetadata = {
+      sourcePath: file.path,
+      sourceRelativePath: file.relativePath,
+      sourceHash: file.hash,
+      moduleId: file.moduleId,
+      lastSynced: new Date(),
+      autoGenerated: true,
+      documentationType: 'readme',
+    };
+
     try {
       const metadata = this.extractArticleMetadata(file);
       const articleData = {
@@ -620,15 +625,7 @@ class ProcessNewFiles extends CollectSystemDocsStep {
         lng: 'en',
         tags: metadata.tags,
         categories: metadata.categories,
-        metadata: {
-          sourcePath: file.path,
-          sourceRelativePath: file.relativePath,
-          sourceHash: file.hash,
-          moduleId: file.moduleId,
-          lastSynced: new Date(),
-          autoGenerated: true,
-          documentationType: 'readme',
-        },
+        metadata: articleMetadata,
       };
       
       const article = await this.articleService.createArticle(articleData as any);
@@ -640,10 +637,45 @@ class ProcessNewFiles extends CollectSystemDocsStep {
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
-      logger.error('[CollectSystemDocs] Failed to process file', {
-        path: file.path,
-        error: error.message,
-      });
+      // If the article already exists (orphaned record with no sourcePath), update it instead.
+      // Extract the slug from the error message: 'Article with slug "<slug>" already exists'
+      if (error instanceof Error && error.message.includes('already exists in this knowledge base')) {
+        const slugMatch = /slug "([^"]+)" already exists/.exec(error.message);
+        if (slugMatch) {
+          try {
+            const meta = this.extractArticleMetadata(file);
+            // Do not pass kbId: orphaned articles have `parent` set but not `knowledgeBase`,
+            // so the kbId filter in getArticleBySlug would not match them.
+            const existing = await this.articleService.getArticleBySlug(slugMatch[1]);
+            const updated = await this.articleService.updateArticle(
+              (existing as any)._id?.toHexString() ?? (existing as any).id,
+              {
+                title: meta.title,
+                description: meta.description,
+                content: file.content || '',
+                tags: meta.tags,
+                categories: meta.categories,
+                metadata: articleMetadata,
+              } as any
+            );
+            return {
+              articleId: (updated as any)._id?.toHexString() ?? (updated as any).id,
+              filePath: file.path,
+              action: 'updated',
+              processingTime: Date.now() - startTime,
+            };
+          } catch (fallbackError) {
+            const fallbackMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
+            const fallbackErrMeta = { path: file.path, error: fallbackMsg };
+            logger.error('[CollectSystemDocs] Failed to update orphaned article', fallbackErrMeta);
+            this.resourceManager?.error('Failed to update orphaned article', fallbackErrMeta);
+          }
+        }
+      }
+      const errMsg = error instanceof Error ? error.message : String(error);
+      const errMeta = { path: file.path, error: errMsg };
+      logger.error('[CollectSystemDocs] Failed to process file', errMeta);
+      this.resourceManager?.error('Failed to process file', errMeta);
       throw error;
     }
   }
@@ -712,23 +744,20 @@ class ProcessUpdatedFiles extends ProcessNewFiles {
       const files = this.data.updatedFiles || [];
       
       if (files.length === 0) {
-        logger.info('[CollectSystemDocs] No updated files to process');
+        this.logInfo('No updated files to process');
         return ExecutionResult.next();
       }
-      
-      logger.info('[CollectSystemDocs] Processing updated files', {
-        totalFiles: files.length,
-      });
+
+      const updatedFilesMeta = { totalFiles: files.length };
+      this.logInfo('Processing updated files', updatedFilesMeta);
       
       for (let i = 0; i < files.length; i += this.PARALLEL_LIMIT) {
         const batch = files.slice(i, i + this.PARALLEL_LIMIT);
         await this.processUpdateBatch(batch);
       }
       
-      logger.info('[CollectSystemDocs] Updated files processing complete', {
-        successful: this.data.successfulArticles?.filter(a => a.action === 'updated').length,
-        failed: this.data.failedFiles?.length,
-      });
+      const updDoneMeta = { successful: this.data.successfulArticles?.filter(a => a.action === 'updated').length, failed: this.data.failedFiles?.length };
+      this.logInfo('Updated files processing complete', updDoneMeta);
       
       return ExecutionResult.next();
     } catch (error) {
@@ -739,9 +768,8 @@ class ProcessUpdatedFiles extends ProcessNewFiles {
   
   private async processUpdateBatch(files: FileWithHash[]): Promise<void> {
     if (this.data.dryRun) {
-      logger.info('[CollectSystemDocs] DRY RUN - Would update files', {
-        files: files.map(f => f.relativePath),
-      });
+      const dryRunMeta = { files: files.map(f => f.relativePath) };
+      this.logInfo('DRY RUN - Would update files', dryRunMeta);
       return;
     }
     
@@ -793,10 +821,9 @@ class ProcessUpdatedFiles extends ProcessNewFiles {
         processingTime: Date.now() - startTime,
       };
     } catch (error) {
-      logger.error('[CollectSystemDocs] Failed to update file', {
-        path: file.path,
-        error: error.message,
-      });
+      const updateErrMeta = { path: file.path, error: error.message };
+      logger.error('[CollectSystemDocs] Failed to update file', updateErrMeta);
+      this.resourceManager?.error('Failed to update file', updateErrMeta);
       throw error;
     }
   }
@@ -823,7 +850,7 @@ class GenerateWorkflowReport extends CollectSystemDocsStep {
           filesScanned: this.data.discoveredFiles?.length || 0,
           filesFound: this.data.fileManifest?.length || 0,
           scanPaths: this.data.targetPaths || [],
-          errors: this.data.errors?.length || 0,
+          errors: this.data.errorCount,
         },
         processing: {
           newArticles: successfulArticles.filter(a => a.action === 'created').length,
@@ -852,16 +879,29 @@ class GenerateWorkflowReport extends CollectSystemDocsStep {
         const errorMsg =
           `Workflow failed: all ${filesFound} file(s) failed processing ` +
           `(${failedFiles} failures, 0 successes). ` +
-          `Check the errors array for details.`;
-        logger.error(`[CollectSystemDocs] ${errorMsg}`, { stats, errors: this.data.errors });
+          `Check the logs for details.`;
+        logger.error(`[CollectSystemDocs] ${errorMsg}`, { stats });
+        this.resourceManager?.error(errorMsg, { stats });
         throw new Error(errorMsg);
       }
 
-      logger.info('[CollectSystemDocs] Workflow complete', {
-        stats,
-        errors: this.data.errors?.length,
-        warnings: this.data.warnings?.length,
-      });
+      const completeMeta = { stats, errors: this.data.errorCount, warnings: this.data.warningCount, info: this.data.infoCount };
+      this.logInfo('Workflow complete', completeMeta);
+
+      // Archive the instance log and record the URL in the workflow stats
+      try {
+        const archiveUrl = await this.resourceManager?.archive();
+        if (archiveUrl) {
+          this.resourceManager?.info('Instance log archived', { archiveUrl });
+        }
+      } catch (archiveError) {
+        logger.warn('[CollectSystemDocs] Failed to archive instance log', { error: archiveError instanceof Error ? archiveError.message : String(archiveError) });
+      }
+
+      // Close and deregister the resource manager
+      if (this.data.instanceId) {
+        await InstanceResourceManager.forInstance(this.data.instanceId)?.close();
+      }
 
       return ExecutionResult.next();
     } catch (error) {

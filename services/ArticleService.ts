@@ -164,7 +164,7 @@ class ArticleService implements IArticleService {
     const query: any = { contentType: KBContentType.ARTICLE };
 
     if (filter.knowledgeBaseId) {
-      query.knowledgeBase = filter.knowledgeBaseId;
+      query.parent = filter.knowledgeBaseId;
     }
 
     if (filter.status) {
@@ -256,6 +256,7 @@ class ArticleService implements IArticleService {
         allowComments: true,
         localizedContent: input.localizedContent || [],
         attachments: input.attachments || [],
+        metadata: input.metadata,
         parentContent: input.parentContent,
         order: input.order || 0,
       };

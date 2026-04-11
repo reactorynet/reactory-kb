@@ -9,7 +9,7 @@ import KBVersion from './KBVersion';
 import KBComment from './KBComment';
 import KBBookmark from './KBBookmark';
 import KBAttachment from './KBAttachment';
-
+import { KnowledgeBasePersona } from '../ai';
 // Export models
 export {
   KBContent,
@@ -33,4 +33,5 @@ export default [
   KBComment,
   KBBookmark,
   KBAttachment,
+  KnowledgeBasePersona,
 ];
