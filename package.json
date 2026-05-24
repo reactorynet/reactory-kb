@@ -18,7 +18,6 @@
     "url": "https://github.com/reactorynet/reactory-express-server.git",
     "directory": "src/modules/reactory-kb"
   },
-  "dependencies": {},
   "peerDependencies": {
     "@reactorynet/reactory-core": "^1.0.0"
   }
