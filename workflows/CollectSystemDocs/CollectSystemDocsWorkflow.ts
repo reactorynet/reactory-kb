@@ -8,7 +8,7 @@ import {
   ExecutionResult,
   WorkflowBuilder,
   StepBuilder,
-} from 'workflow-es';
+} from '@reactorynet/workflow-es';
 import * as globModule from 'glob';
 import { promises as fs } from 'fs';
 import * as path from 'path';
