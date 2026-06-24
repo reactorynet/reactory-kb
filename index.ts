@@ -38,9 +38,12 @@ const ReactoryKnowledgeBaseModule: Reactory.Server.IReactoryModule = {
   pdfs: [],
   middleware,
   routes,
-  ai: {
+  reactor: {
+    providers: [],
+    tools: [],
+    mcp: [],
+    agents: [],
     macros: KB_MACROS,
-    personas: [KnowledgeBasePersona],
   },
 };
 
