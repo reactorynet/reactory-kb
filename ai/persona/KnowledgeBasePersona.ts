@@ -5,7 +5,7 @@
  */
 
 import Reactory from '@reactorynet/reactory-core';
-import { KB_MACROS } from '../macros';
+import { KB_MACROS, KB_TOOLS } from '../macros';
 import { IAIPersona } from 'modules/reactory-reactor/types/service.types';
 
 /**
@@ -85,7 +85,7 @@ export const KnowledgeBasePersona: IAIPersona = {
   modelId: process.env.GOOGLE_AI_STUDIO_MODEL_ID || 'gemini-2.5-pro',
   persona: 'knowledge_base_assistant',
   providerId: 'google',
-  tools: [...KB_MACROS],
+  tools: [...KB_TOOLS],
   macros: [...KB_MACROS],
   resources: [...KB_RESOURCES],
   prompts: {

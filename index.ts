@@ -8,7 +8,7 @@ import models from './models';
 import services from './services';
 import routes from './routes';
 import middleware from './middleware';
-import { KB_MACROS, KnowledgeBasePersona } from './ai';
+import { KB_MACROS, KB_TOOLS, KnowledgeBasePersona } from './ai';
 
 const ReactoryKnowledgeBaseModule: Reactory.Server.IReactoryModule = {
   id: 'reactory-kb',
@@ -40,7 +40,7 @@ const ReactoryKnowledgeBaseModule: Reactory.Server.IReactoryModule = {
   routes,
   reactor: {
     providers: [],
-    tools: [],
+    tools: KB_TOOLS,
     mcp: [],
     agents: [],
     macros: KB_MACROS,
