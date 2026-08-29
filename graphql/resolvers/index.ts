@@ -7,10 +7,10 @@
 import Reactory from '@reactorynet/reactory-core';
 import { roles } from '@reactory/server-core/authentication/decorators';
 import { resolver, property, query, mutation } from '@reactory/server-core/models/graphql/decorators/resolver';
-import { IKnowledgeBaseService } from 'modules/reactory-kb/services/KnowledgeBaseService';
-import { IArticleService } from 'modules/reactory-kb/services/ArticleService';
-import { ICollaborationService } from 'modules/reactory-kb/services/CollaborationService';
-import { ILocalizationService } from 'modules/reactory-kb/services/LocalizationService';
+import { IKnowledgeBaseService } from '@reactory/server-modules/reactory-kb/services/KnowledgeBaseService';
+import { IArticleService } from '@reactory/server-modules/reactory-kb/services/ArticleService';
+import { ICollaborationService } from '@reactory/server-modules/reactory-kb/services/CollaborationService';
+import { ILocalizationService } from '@reactory/server-modules/reactory-kb/services/LocalizationService';
 
 /**
  * Helper functions to get KB services
