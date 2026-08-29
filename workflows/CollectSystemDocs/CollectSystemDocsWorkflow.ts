@@ -916,7 +916,7 @@ class GenerateWorkflowReport extends CollectSystemDocsStep {
  */
 class CollectSystemDocsWorkflow implements WorkflowBase<CollectSystemDocsData> {
   id: string = 'kb.CollectSystemDocsWorkflow@1.0.0';
-  version: number = 1;
+  version: string = '1.0.0';
   
   public build(builder: WorkflowBuilder<CollectSystemDocsData>): void {
     builder

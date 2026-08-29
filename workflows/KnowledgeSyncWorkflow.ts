@@ -383,7 +383,7 @@ async function findExistingArticle(articleService: any, item: any): Promise<any 
  */
 class KnowledgeSyncWorkflowImpl implements WorkflowBase<KnowledgeSyncData> {
   id: string = 'kb.KnowledgeSyncWorkflow@1.0.0';
-  version: number = 1;
+  version: string = '1.0.0';
 
   public build(builder: any) {
     builder

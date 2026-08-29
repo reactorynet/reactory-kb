@@ -258,7 +258,7 @@ class Complete extends ArticleReviewStep {
  */
 class ArticleReviewWorkflowImpl implements WorkflowBase<ArticleReviewData> {
   id: string = 'kb.ArticleReviewWorkflow@1.0.0';
-  version: number = 1;
+  version: string = '1.0.0';
 
   public build(builder: any) {
     builder
