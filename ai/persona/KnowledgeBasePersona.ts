@@ -6,7 +6,7 @@
 
 import Reactory from '@reactorynet/reactory-core';
 import { KB_MACROS, KB_TOOLS } from '../macros';
-import { IAIPersona } from 'modules/reactory-reactor/types/service.types';
+import { IAIPersona } from '@reactory/server-modules/reactory-reactor/types/service.types';
 
 /**
  * Build system prompt for KB assistant
