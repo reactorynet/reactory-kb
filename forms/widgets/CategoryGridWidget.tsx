@@ -3,7 +3,7 @@ interface ReactoryWindow extends Window {
   reactory?: {
     api?: Reactory.Client.IReactoryApi;
   }
-};
+}
 
 const CategoryGridWidget: React.FC<unknown & {
  reactory: Reactory.Client.IReactoryApi;
