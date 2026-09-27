@@ -2,7 +2,7 @@ interface ReactoryWindow extends Window {
   reactory?: {
     api?: Reactory.Client.IReactoryApi;
   }
-};
+}
 
 const ContentListWidget: React.FC<unknown & {
  reactory: Reactory.Client.IReactoryApi;
