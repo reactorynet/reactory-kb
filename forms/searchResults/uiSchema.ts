@@ -16,6 +16,11 @@ const SearchResultsUISchema: Reactory.Schema.IFormUISchema = {
     { sortBy: { xs: 12, sm: 3, lg: 2, xl: 2 } },
     { total: { xs: 12, sm: 12, lg: 12, xl: 12 } },
     { facets: { xs: 12, sm: 12, lg: 3, xl: 3 } },
+    // Active-filter chips sit directly above the result list they constrain. The
+    // widget was configured below but missing from the layout, which is the render
+    // list — so it never appeared on either engine.
+    // See REACTORY-302016408/20261014/2327145804.
+    { filters: { xs: 12, sm: 12, lg: 12, xl: 12 } },
     { results: { xs: 12, sm: 12, lg: 9, xl: 9 } },
     { page: { xs: 12, sm: 12, lg: 12, xl: 12 } },
   ],

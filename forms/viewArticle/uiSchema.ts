@@ -24,6 +24,12 @@ const ViewArticleUISchema: Reactory.Schema.IFormUISchema = {
   'ui:grid-layout': [
     { title: { xs: 12, sm: 12, lg: 12, xl: 12 } },
     { author: { xs: 6, sm: 6, lg: 4, xl: 3 } },
+    // Article-state metadata. These had widgets configured below but were absent
+    // from the layout, which is the render list — so they never appeared on either
+    // engine. See REACTORY-302016408/20261014/2327145804.
+    { status: { xs: 6, sm: 6, lg: 4, xl: 3 } },
+    { lng: { xs: 6, sm: 6, lg: 4, xl: 3 } },
+    { version: { xs: 6, sm: 6, lg: 4, xl: 3 } },
     { createdAt: { xs: 6, sm: 6, lg: 4, xl: 3 } },
     { updatedAt: { xs: 6, sm: 6, lg: 4, xl: 3 } },
     { viewCount: { xs: 6, sm: 6, lg: 4, xl: 3 } },
